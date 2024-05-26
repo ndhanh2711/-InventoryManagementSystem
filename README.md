@@ -16,3 +16,6 @@
       Chức năng này giúp phục vụ việc kiểm tra hàng hoá
       1. Tăng giảm theo giá thành
       2. Tăng giảm theo số lượng
+#### Sắp xếp theo giá tiền, số lượng
+
+#### Nhập mã sản phẩm theo chữ cái đầu, khi nhập chữ cái đầu của từng sản phẩm sẽ in ra tên sản phẩm, giá tiền, số lượng
