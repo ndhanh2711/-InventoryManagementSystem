@@ -130,17 +130,7 @@ int somathang(){
     }
     return cnt;
 }
-int countDigits(int n) {
-    int count = 1;
-    if (n == 0) {
-        return 2;
-    }
-    while (n) {
-        count++;
-        n /= 10;
-    }
-    return count;
-}
+
 long long costofwh(){
     long long cost = 0;
     for(int i = 0; i < somathang(); i++){
@@ -164,9 +154,9 @@ void hienthikho(int n){ //Hàm hi?n th? kho hàng v?i các m?t hàng s?n có
         }
         int a = strlen(kho[i].tenhang);
         cout << kho[i].tenhang << setw(24 - a) << "|";
-        int b = countDigits(kho[i].soluong);
+        int b = cnt(kho[i].soluong);
         cout << kho[i].soluong << setw(18 - b) << "|";
-        int c = countDigits(kho[i].giathanh);
+        int c = cnt(kho[i].giathanh);
             cout << fixed <<kho[i].giathanh << " " << setw(12 - c) << "|"<<endl;
     }
     cout << "$-----$-----------------------$----------------$-------------------$\n" << endl;
