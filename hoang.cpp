@@ -106,7 +106,7 @@ void taokho() {
     kho[7].giathanh = 180000;
     kho[7].code = generateCode(kho[7].tenhang);
     
-    strcpy(kho[8].tenhang, "Xa phong");
+    strcpy(kho[8].tenhang, "Sena");
     kho[8].soluong = 1000;
     kho[8].giathanh = 150000;
     kho[8].code = generateCode(kho[8].tenhang);
@@ -120,7 +120,7 @@ void taokho() {
 
 int somathang(){
     int cnt = 0;
-    for(int i = 0; i < kho.size(); i++){
+    for(int i = 0; i < 100; i++){
         if(strlen(kho[i].tenhang)){
             cnt++;
         }
@@ -130,7 +130,17 @@ int somathang(){
     }
     return cnt;
 }
-
+int countDigits(int n) {
+    int count = 1;
+    if (n == 0) {
+        return 2;
+    }
+    while (n) {
+        count++;
+        n /= 10;
+    }
+    return count;
+}
 long long costofwh(){
     long long cost = 0;
     for(int i = 0; i < somathang(); i++){
@@ -154,45 +164,92 @@ void hienthikho(int n){ //Hàm hi?n th? kho hàng v?i các m?t hàng s?n có
         }
         int a = strlen(kho[i].tenhang);
         cout << kho[i].tenhang << setw(24 - a) << "|";
-        int b = cnt(kho[i].soluong);
+        int b = countDigits(kho[i].soluong);
         cout << kho[i].soluong << setw(18 - b) << "|";
-        int c = cnt(kho[i].giathanh);
+        int c = countDigits(kho[i].giathanh);
             cout << fixed <<kho[i].giathanh << " " << setw(12 - c) << "|"<<endl;
     }
     cout << "$-----$-----------------------$----------------$-------------------$\n" << endl;
     cout << RESET;
     cout << YELLOW << "Tong so tien hang co trong kho bay gio la:" << costofwh() << RESET << endl;
+    
     for(int i = 0; i < n; i++){
         if(kho[i].soluong < 20){
             cout << RED << "INFORM: Mat hang" << kho[i].tenhang << "trong kho qua it de duy tri nhu cau" << endl << RESET;
         }
     }
 }
-void xuatkho(){
+void xuatkho() {
     taokho();
-            int xuat;
-            cout << "SO MAT HANG MUON XUAT KHO: ";
-            cin >> xuat;
-            for(int i = 0; i < xuat; i++){
-                int x;
-                printf("NHAP MA SAN PHAM %d: ", i + 1); //hi?n t?i v?n dang ch?n s?, sau dó s? c?i ti?n lên thành mã don hàng
-                cout << "SO LUONG: ";
-                while(1){
-                    int a;
-                    cin >> a;
-                    if( a > kho[x].soluong ){
-                        cout << "So luong mat hang trong kho khong du so voi yeu cau" << endl;
-                        cout << "Yeu cau nhap lai: ";
-                        continue;
-                    }
-                    else{
-                        kho[x].soluong -= a;
+    string code;
+    cout << "Nhap ma san pham: ";
+    cin >> code;
+
+    bool found = false;
+    for (int i = 0; i < somathang(); i++) {
+        if (kho[i].code == code) {
+            found = true;
+            if (i > 0 && kho[i].code == kho[i - 1].code) {
+                continue;
+            }
+
+            if (i < somathang() - 1 && kho[i].code == kho[i + 1].code) {
+                cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
+                string Name;
+                cin.ignore();
+                getline(cin, Name);
+                
+                
+                bool checkname = false;
+                for (int j = i; j < somathang(); j++) {
+                    if (strcmp(kho[j].tenhang, Name.c_str()) == 0 && kho[j].code == code) {
+                        checkname = true;
+                        cout<<"Ten hang: "<<kho[j].tenhang<<endl<<"So Luong: "<<kho[j].soluong<<endl<<"Gia: "<<kho[j].giathanh<<endl;
+                        cout << "Nhap so luong can xuat: ";
+                        int quantity;
+                        cin >> quantity;
+                        
+                        
+                        if (quantity > 0 && quantity <= kho[j].soluong) {
+                            kho[j].soluong -= quantity;
+                            cout << "Da xuat " << quantity << " san pham." << endl;
+                        } else {
+                            cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << endl;
+                        }
+                        break; 
                     }
                 }
+                if (!checkname) {
+                    cout << "Khong tim thay mat hang voi ten da nhap." << endl;
+                }
+            } else {
+               
+                cout << "Ten hang: " << kho[i].tenhang << endl;
+                cout << "So luong: " << kho[i].soluong << endl;
+                cout << "Gia thanh: " << kho[i].giathanh << endl;
+
+                int quantity;
+                cout << "Nhap so luong can xuat: ";
+                cin >> quantity;
+
+            
+                if (quantity > 0 && quantity <= kho[i].soluong) {
+                    kho[i].soluong -= quantity;
+                    cout << "Da xuat " << quantity << " san pham." << endl;
+                } else {
+                    cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << endl;
+                }
             }
-            cout << "CAP NHAT KHO HANG HIEN TAI"<< endl;
-            hienthikho(somathang());
+        }
     }
+
+    if (!found) {
+        cout << "Khong tim thay san pham voi ma nay." << endl;
+    }
+
+    cout << "CAP NHAT KHO HANG HIEN TAI" << endl;
+    hienthikho(somathang());
+}
 void nhapkho(){
     taokho();
     cout << "So mat hang co trong kho la: ";
@@ -201,12 +258,14 @@ void nhapkho(){
     int n;
     cin >> n;
     for(int i = 0; i < n; i++){
-        printf("NHAO THONG TIN MAT HANG SO %d:\n", somathang() + i);
-        nhap2(kho, somathang() + i);
+        printf("NHAP THONG TIN MAT HANG SO %d:\n", somathang() );
+        nhap2(kho, somathang() );
     }
     cout << "CAP NHAT KHO HANG HIEN TAI"<<endl;
-    hienthikho(somathang() + n);
+    hienthikho(somathang() );
 }
+
+
 void baomat(){
     cout << RED;
     string a = "alester";
@@ -267,7 +326,7 @@ void laythongtinsanpham(const string& code) {
             cout << "Ten hang: " << kho[i].tenhang << endl;
             cout << "So luong: " << kho[i].soluong << endl;
             cout << "Gia thanh: " << kho[i].giathanh << endl;
-            break;
+            
         }
     }
     if (!found) {
@@ -280,8 +339,10 @@ int main() {
         cout << "|  1.XEM THONG TIN MAT HANG TON KHO                  |" << endl;
         cout << "|  2.XUAT KHO                                        |" << endl;
         cout << "|  3.NHAP HANG VAO KHO                               |" << endl;
-        cout << "|  4.SAP XEP THEO YEU CAU                            |" << endl;
-        cout << "|  0.EXIT THE SYSTEM.                                |" << endl;
+        cout << "|  4.SAP XEP THEO GIA                                |" << endl;
+        cout << "|  5.SAP XEP THEO SO LUONG.                          |" << endl;
+        cout << "|  6.KIEM TRA HANG THEO MA SAN PHAM.                 |" << endl;
+        cout << "|  7.EXIT THE SYSTEM.                                |" << endl;
         cout << "!____________________________________________________!" << endl;
         cout << "SELECT OPTION: " << RESET;
         int lc;
