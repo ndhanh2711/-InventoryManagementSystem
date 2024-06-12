@@ -5,6 +5,7 @@
 #include <cstring>
 #include <iomanip>
 #include <vector>
+#include <algorithm>
                 #define RESET   "\033[0m"
                 #define RED     "\033[31m"
                 #define GREEN   "\033[32m"
@@ -12,7 +13,7 @@
                 #define BLUE    "\033[34m"
                 #define MAGENTA "\033[35m"
                 #define CYAN    "\033[36m"
-
+using namespace std; //để tạm đỡ phải gõ std::, sau nhớ xoá đi
 struct mathang{
     char tenhang[100];
     int soluong;
@@ -90,11 +91,14 @@ void taokho() {
 
 int somathang(){
     int cnt = 0;
-    for(int i = 0; i < kho.size(); i++){
+    for(int i = 0; i < 100; i++){
         if(strlen(kho[i].tenhang) != 0){
             cnt++;
         }
+        else{
+            break;
         }
+    }
     return cnt;
 }
 
@@ -105,7 +109,6 @@ long long costofwh(){
     }
     return cost;
 }
-
 void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng sẵn có
     std::cout << CYAN;
     std::cout << "$_____$_______________________$________________$___________________$"<< std::endl;
@@ -174,11 +177,11 @@ void nhapkho(){
     int n;
     std::cin >> n;
     for(int i = 0; i < n; i++){
-        printf("NHAO THONG TIN MAT HANG SO %d:\n", somathang() + i);
-        nhap2(kho, somathang() + i);
+        printf("NHAO THONG TIN MAT HANG SO %d:\n", somathang());
+        nhap2(kho, somathang());
     }
     std::cout << "CAP NHAT KHO HANG HIEN TAI"<<std::endl;
-    hienthikho(somathang() + n);
+    hienthikho(somathang());
 }
 
 void baomat(){
@@ -217,7 +220,7 @@ int main() {
         std::cout << "|  2.XUAT KHO                                        |" << std::endl;
         std::cout << "|  3.NHAP HANG VAO KHO                               |" << std::endl;
         std::cout << "|  4.SAP XEP THEO YEU CAU                            |" << std::endl;
-        std::cout << "|  0.EXIT THE SYSTEM.                                |" << std::endl;
+        std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
         std::cout << "SELECT OPTION: " << RESET;
         int lc;

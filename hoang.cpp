@@ -182,14 +182,11 @@ void xuatkho() {
             if (i > 0 && kho[i].code == kho[i - 1].code) {
                 continue;
             }
-
             if (i < somathang() - 1 && kho[i].code == kho[i + 1].code) {
                 cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
                 string Name;
                 cin.ignore();
                 getline(cin, Name);
-                
-                
                 bool checkname = false;
                 for (int j = i; j < somathang(); j++) {
                     if (strcmp(kho[j].tenhang, Name.c_str()) == 0 && kho[j].code == code) {
