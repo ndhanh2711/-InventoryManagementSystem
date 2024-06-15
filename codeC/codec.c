@@ -59,9 +59,9 @@ int somathang(){
     return demhang;
 }
 void hienthi(int n){
-    printf("$_____$_________________________$________________$________________$\n");
-    printf("| STT |       TÊN SẢN PHẨM      |    SỐ LƯỢNG    |    GIÁ/1 SP    |\n");
-    printf("|-----|-------------------------|----------------|----------------|\n");
+    printf("$______$_________________________$________________$________________$\n");
+    printf("| STT  |       TEN SAN PHAM      |    SO LUONG    |    GIA/1 SP    |\n");
+    printf("|------|-------------------------|----------------|----------------|\n");
     for(int i = 0; i < n; i++){
         if(strlen(kho[i].tenhang) == 0) continue;  // Chỉ hiển thị mặt hàng có tên
         printf("| %-3d  | %-23s | %-14d | %-14.2f |\n", i+1, kho[i].tenhang, kho[i].soluong, kho[i].giathanh);
@@ -86,18 +86,56 @@ void nhap(mathang *a){
     printf("Nhap gia tien tren mot san pham: ");
     scanf("%lf", &(a->giathanh));
 }
+void xuatkho(){
+    taokho();
+    int a;
+    printf("So mat hang muon xuat kho: ");
+    scanf("%d",&a);
+    for(int i=0;i<a;i++){
+        int xuat;
+        printf("Nhap ma san pham %d: ",i+1);
+        scanf("%d",&xuat);
+        if(xuat<0||xuat>somathang()){
+            printf("Ma san pham khong hop le vui long nhap lai ");
+            i--;
+            continue;
+        }
+        int soluong=0;
 
+        while(1){
+        printf("Nhap so luong: ");
+        scanf("%d",&soluong);
+        if(soluong > 0 && soluong<=kho[xuat-1].soluong){
+            break; // số lượng hợp lệ thoát vòng while
+        }
+        else printf("So luong khong hop le vui long nhap lai: ");
+        }
+        kho[xuat-1].soluong=kho[xuat-1].soluong-soluong;
+        if(kho[xuat-1].soluong==0){
+            for(int i=xuat-1;i<=somathang();i++){
+                kho[i]=kho[i+1];
+            }
+            demhang--;
+        }
+    }
+    hienthi(somathang());
+}
+void nhatkho(){
+    int nhap;
+    printf("So mat hang muon nhap kho: ");
+    scanf("%d", &nhap);
+}
 void sapxep(mathang *kho,int n){
     int luachon;
-    printf("Sắp xếp sản phẩm\n");
-    printf("Chọn 1: xắp xếp theo giá thành\n");
-    printf("Chọn 2: xắp sếp theo số lượng\n");
+    printf("Sap xep san pham\n");
+    printf("Chon 1: xap xep theo gia thanh\n");
+    printf("Chon 2: xap sep theo so luong\n");
     while (true){
     scanf("%d",&luachon);
     if(luachon==1){
         int chon;
-        printf("1. Tăng dần\n");
-        printf("2. Giảm dần\n");
+        printf("1. Tang dan\n");
+        printf("2. Giam dan\n");
         while (true){
         scanf("%d",&chon);
         if(chon==1){
@@ -126,14 +164,14 @@ void sapxep(mathang *kho,int n){
             hienthi(n);
             break;
         }
-        else printf("Lựa chọn không hợp lệ vui lòng nhập lại\n");
+        else printf("Lua chon khong hop le vui long nhap lai\n");
         }
         break;
     }
     if(luachon==2){
         int chon;
-        printf("1. Tăng dần\n");
-        printf("2. Giảm dần\n");
+        printf("1. Tang dan\n");
+        printf("2. Giam dan\n");
         while(true){
         scanf("%d",&chon);
         if(chon==1){
@@ -170,11 +208,40 @@ void sapxep(mathang *kho,int n){
         printf("Lựa chọn không hợp lệ vui lòng nhập lại\n");
     }
    }
-
 }
+
 int main() {
-    taokho();
-    hienthi(somathang());
-    sapxep(kho,somathang());
+     while(1){
+        printf("______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______\n");
+        printf("|  1.XEM THONG TIN MAT HANG TON KHO                  |\n");
+        printf("|  2.XUAT KHO                                        |\n");
+        printf("|  3.NHAP HANG VAO KHO                               |\n");
+        printf("|  4.SAP XEP THEO YEU CAU                            |\n");
+        printf("|  0.EXIT THE SYSTEM.                                |\n");
+        printf("!____________________________________________________!\n");
+        printf("SELECT OPTION: ");
+        int lc;
+        scanf("%d",&lc);
+        if(lc == 1){
+            taokho();
+            hienthi(10);
+            //FINISHED
+        }
+        else if(lc == 2){
+            //FINISHED
+            xuatkho();
+        }
+        else if(lc == 3){
+        }
+        else if(lc == 4){
+            // Implement sorting functionality here
+            sapxep(kho,somathang());
+        }
+        else if(lc == 0){
+            //FINISHED
+            printf("*************   HE THONG DA DONG   *************\n");
+            return 0;
+        }
+    }
     return 0;
 }
