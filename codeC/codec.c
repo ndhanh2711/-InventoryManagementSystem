@@ -87,7 +87,6 @@ void nhap(mathang *a){
     scanf("%lf", &(a->giathanh));
 }
 void xuatkho(){
-    taokho();
     int a;
     printf("So mat hang muon xuat kho: ");
     scanf("%d",&a);
@@ -120,10 +119,18 @@ void xuatkho(){
     }
     hienthi(somathang());
 }
-void nhatkho(){
-    int nhap;
-    printf("So mat hang muon nhap kho: ");
-    scanf("%d", &nhap);
+void nhapkho(){
+    int n;
+    printf("So mat hang dang co trong kho: %d\n",somathang());
+    printf("So mat hang muon them vao kho: ");
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++){
+        printf("Nhap thong tin mat hang so %d:\n", somathang() + i + 1);
+        nhap(&kho[demhang + i]);
+    }
+    demhang+=n;
+    printf("Cap nhat thong tin hien tai\n");
+    hienthi(somathang());
 }
 void sapxep(mathang *kho,int n){
     int luachon;
@@ -211,6 +218,7 @@ void sapxep(mathang *kho,int n){
 }
 
 int main() {
+    taokho();
      while(1){
         printf("______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______\n");
         printf("|  1.XEM THONG TIN MAT HANG TON KHO                  |\n");
@@ -223,8 +231,7 @@ int main() {
         int lc;
         scanf("%d",&lc);
         if(lc == 1){
-            taokho();
-            hienthi(10);
+            hienthi(somathang());
             //FINISHED
         }
         else if(lc == 2){
@@ -232,6 +239,7 @@ int main() {
             xuatkho();
         }
         else if(lc == 3){
+            nhapkho();
         }
         else if(lc == 4){
             // Implement sorting functionality here
@@ -241,6 +249,9 @@ int main() {
             //FINISHED
             printf("*************   HE THONG DA DONG   *************\n");
             return 0;
+        }
+        else {
+            printf("Lua chon khong họp le vui long nhap lai ");
         }
     }
     return 0;
