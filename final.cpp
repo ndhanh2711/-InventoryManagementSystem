@@ -182,69 +182,87 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
         }
     }
 }
-void xuatkho() {// hàm xuất kho bằng code
+void xuatkho() {
     taokho();
-    
     std::string code;
-    std::cout << YELLOW << "Nhap ma san pham xuat kho: " << RESET;
-    std::cin >> code;
+    int n;
+    std::cout << "Nhap so luong mat hang can xuat kho: ";
+    std::cin >> n;
+    std::cin.ignore(); 
 
-    bool found = false;
-    for (int i = 0; i < somathang(); i++) {
-        if (kho[i].code == code) {
-            found = true;
-            if (i > 0 && kho[i].code == kho[i - 1].code) {
-                continue;
-            }
-            if (i < somathang() - 1 && kho[i].code == kho[i + 1].code) {
-                std::cout << RED << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: " << RESET;
-                std::string Name;
-                std::cin.ignore();
-                getline(std::cin, Name);
+    for (int i = 0; i < n; i++) {
+        std::cout << "Nhap ma san pham " << i+1 <<":";
+        std::cin >> code;
+        std::cin.ignore(); 
+
+        bool found = false;
+        for (int j = 0; j < somathang(); j++) {
+            if (kho[j].code == code) {
+                found = true;
                 bool checkname = false;
-                for (int j = i; j < somathang(); j++) {
-                    if (strcmp(kho[j].tenhang, Name.c_str()) == 0 && kho[j].code == code) {
-                        checkname = true;
-                        
+
+                if (j > 0 && kho[j].code == kho[j - 1].code) {
+                    continue;
+                }
+
+                if (j < somathang() - 1 && kho[j].code == kho[j + 1].code) {
+                    std::cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
+                    std::string Name;
+                    getline(std::cin, Name);
+
+                    for (int k = j; k < somathang(); k++) {
+                        if (kho[k].tenhang == Name && kho[k].code == code) {
+                            checkname = true;
+                            std::cout << "Ten hang: " << kho[k].tenhang << std::endl;
+                            std::cout << "So Luong: " << kho[k].soluong << std::endl;
+                            std::cout << "Gia: " << kho[k].giathanh << std::endl;
+
+                            int quantity;
+                            do {
+                                std::cout << "Nhap so luong can xuat: ";
+                                std::cin >> quantity;
+                                std::cin.ignore();
+
+                                if (quantity > 0 && quantity <= kho[k].soluong) {
+                                    kho[k].soluong -= quantity;
+                                    std::cout << "Da xuat " << quantity << " san pham." << std::endl;
+                                    break; 
+                                } else {
+                                    std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho. Vui long nhap lai." << std::endl;
+                                }
+                            } while (true);
+                            break; 
+                        }
+                    }
+                    if (!checkname) {
+                        std::cout << "Khong tim thay mat hang voi ten da nhap." << std::endl;
+                    }
+                } else {
+                    std::cout << "Ten hang: " << kho[j].tenhang << std::endl;
+                    std::cout << "So luong: " << kho[j].soluong << std::endl;
+                    std::cout << "Gia thanh: " << kho[j].giathanh << std::endl;
+
+                    int quantity;
+                    do {
                         std::cout << "Nhap so luong can xuat: ";
-                        int quantity;
-                        std::cin >> quantity;                        
+                        std::cin >> quantity;
+                        std::cin.ignore(); 
+
                         if (quantity > 0 && quantity <= kho[j].soluong) {
                             kho[j].soluong -= quantity;
                             std::cout << "Da xuat " << quantity << " san pham." << std::endl;
+                            break; 
+                        } else {
+                            std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho. Vui long nhap lai." << std::endl;
                         }
-                        else {
-                            std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << std::endl;
-                            std::cout << "Yeu cau nhap lai: ";
-
-                            continue;
-                        }
-                        break; 
-                    }
-                }
-                if (!checkname) {
-                    std::cout << "Khong tim thay mat hang voi ten da nhap." << std::endl;
-                }
-            }
-                 else {
-               
-                std::cout << "Ten hang: " << kho[i].tenhang << std::endl;
-                std::cout << "So luong: " << kho[i].soluong << std::endl;
-                std::cout << "Gia thanh: " << kho[i].giathanh << std::endl;
-                int quantity;
-                std::cout << "Nhap so luong can xuat: ";
-                std::cin >> quantity;            
-                if (quantity > 0 && quantity <= kho[i].soluong) {
-                    kho[i].soluong -= quantity;
-                    std::cout << "Da xuat " << quantity << " san pham." << std::endl;
-                } else {
-                    std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << std::endl;
+                    } while (true);
                 }
             }
         }
-    }
-    if (!found) {
-        std::cout << "Khong tim thay san pham voi ma nay." << std::endl;
+        if (!found) {
+            std::cout << "Khong tim thay san pham voi ma nay. Vui long nhap lai." << std::endl;
+            i--; 
+        }
     }
     std::cout << "CAP NHAT KHO HANG HIEN TAI" << std::endl;
     hienthikho(somathang());
