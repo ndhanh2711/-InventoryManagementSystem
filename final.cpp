@@ -62,7 +62,6 @@ void nhap2(std::vector<mathang>& kho, int n) {
     oss << GREEN << "Nhap    Mat hang: " << kho[n].tenhang << " So luong: " << kho[n].soluong << " Gia tien: " << kho[n].giathanh << RESET;
     logOperation(oss.str());
     }
-
 int cnt(int n){ //Hàm tính độ dài của 1 số để căn lề bẳng sản phẩm
     int count = 1;
     if(n == 0){
@@ -241,6 +240,7 @@ void xuatkho() {// hàm xuất kho bằng code
                     std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << std::endl;
                 }
             }
+            
         }
     }
     if (!found) {
@@ -253,18 +253,17 @@ void xuatkho() {// hàm xuất kho bằng code
 void nhapkho(){
     taokho();
     std::cout << "So mat hang co trong kho la: ";
-    std::cout << somathang() << std::endl;
-    std::cout << "SO LUONG MAT HANG MUON THEM VAO KHO: ";
-    int n;
-    std::cin >> n;
-    for(int i = 0; i < n; i++){
-        printf("NHAP THONG TIN MAT HANG SO %d:\n", somathang());
-        nhap2(kho, somathang());
-    }
-    std::cout << "CAP NHAT KHO HANG HIEN TAI"<<std::endl;
-    hienthikho(somathang());
-}
-
+            std::cout << somathang() << std::endl;
+            std::cout << "SO LUONG MAT HANG MUON THEM VAO KHO: ";
+            int n;
+            std::cin >> n;
+            for(int i = 0; i < n; i++){
+                printf("NHAP THONG TIN MAT HANG SO %d:\n", somathang());
+                nhap2(kho, somathang());
+            }
+            std::cout << "CAP NHAT KHO HANG HIEN TAI"<<std::endl;
+            hienthikho(somathang());
+        }
 void baomat(){
     std::cout << RED;
     std::string a = "alester";
@@ -308,8 +307,8 @@ void timee(std::string& timeStr) {
     tm *ltm = localtime(&now);
 
     std::stringstream ss;
-    ss << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year
-       << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
+    ss  << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year
+       << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec ;
 
     timeStr = ss.str();
     
@@ -318,8 +317,17 @@ void clearLogFile() {
     std::ofstream logFile("log.txt", std::ios::trunc);
     logFile.close();
 }
-void log(){
-
+void showlog(){
+    std::ifstream logFile("log.txt");
+    if (logFile.is_open()) {
+        std::string line;
+        while (getline(logFile, line)) {
+            std::cout << line << std::endl;
+        }
+        logFile.close();
+    } else {
+        std::cerr << "Unable to open log file." << std::endl;
+    }
 }
 void check1() {
 	taokho();
@@ -391,7 +399,7 @@ int main() {
         std::cout << "|  3.NHAP HANG VAO KHO                               |" << std::endl;
         std::cout << "|  4.SAP XEP                                         |" << std::endl;
         std::cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << std::endl;
-        std::cout << "|  6.XEM LICH SU XUAT NHAP HANG                     |" << std::endl;
+        std::cout << "|  6.XEM LICH SU XUAT NHAP HANG                      |" << std::endl;
         std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
         std::cout << "SELECT OPTION: " << RESET;
@@ -403,16 +411,20 @@ int main() {
             //FINISHED
         }
         else if(lc == 2){
+            std::cout << YELLOW;
             std::string timeMsg;
             timee(timeMsg);
+            std::cout << RESET;
             logOperation(timeMsg);
             //FINISHED
             xuatkho();
         }
         else if(lc == 3){
+            std::cout << YELLOW;
             std::string timeMsg;
             timee(timeMsg);
             logOperation(timeMsg);
+            std::cout << RESET;
             nhapkho();
         }
         else if(lc == 4){
@@ -455,13 +467,19 @@ int main() {
             std::cin >> code;
             laythongtinsanpham(code);
         }
-        else if(lc == 10){
-            log();
+        else if(lc == 6){
+            std::cout << CYAN << "\n\nLich su nhap & xuat hang trong ngay hom nay" << std::endl;
+            showlog();
+            std::cout << "\n\n";
         }
         else if(lc == 0){
             deletefile();
             //FINISHED
-            std::cout << YELLOW << "*************   HE THONG DA DONG   *************"<<RESET << std::endl;
+                std::cout << RED << "------------------EEEEE  N   N  DDDD------------------\n";
+                std::cout << "------------------E      NN  N  D   D-----------------\n";
+                std::cout << "------------------EEEE   N N N  D   D-----------------\n";
+                std::cout << "------------------E      N  NN  D   D-----------------\n";
+                std::cout << "------------------EEEEE  N   N  DDDD------------------\n" << RESET;
             return 0;
         }
     }
