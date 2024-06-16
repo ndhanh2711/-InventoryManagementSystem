@@ -41,6 +41,13 @@ std::string generateCode(const std::string& name) { // hàm lấy code từ tên
     }
     return code;
 }
+void logOperation(const std::string& operation) {
+    std::ofstream logFile("log.txt", std::ios::app);
+    if (logFile.is_open()) {
+        logFile << operation << std::endl;
+    }
+    logFile.close();
+}
 void nhap2(std::vector<mathang>& kho, int n) {
     std::cin.ignore();
     std::cout << "Name: ";
@@ -51,7 +58,10 @@ void nhap2(std::vector<mathang>& kho, int n) {
     std::cout << "Cost/item: ";
     std::cin >> kho[n].giathanh;
     kho[n].code = generateCode(kho[n].tenhang);
-}
+    std::ostringstream oss;
+    oss << GREEN << "Nhap    Mat hang: " << kho[n].tenhang << " So luong: " << kho[n].soluong << " Gia tien: " << kho[n].giathanh << RESET;
+    logOperation(oss.str());
+    }
 
 int cnt(int n){ //Hàm tính độ dài của 1 số để căn lề bẳng sản phẩm
     int count = 1;
@@ -118,7 +128,8 @@ void taokho() {
     kho[9].code = generateCode(kho[9].tenhang);
 }
 
-int somathang(){// tính số mặt hàng trong kho
+int somathang(){
+    // tính số mặt hàng trong kho
     int cnt = 0;
     for(int i = 0; i < 100; i++){
         if(strlen(kho[i].tenhang) != 0){
@@ -140,8 +151,8 @@ long long costofwh(){
 }
 void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng sẵn có
     std::cout << CYAN;
-    std::cout << "$_____$_______________________$________________$___________________$"<< std::endl;
-    std::cout << "| STT |" <<"    THE PRODUCT NAME   |" << "  THE QUANTITY  |" << "   COST/1item($)   |"<<std::endl;
+    std::cout << "$_____$______$_______________________$________________$___________________$"<< std::endl;
+    std::cout << "| STT |" << " CODE |" << "    THE PRODUCT NAME   |" << "  THE QUANTITY  |" << "   COST/1item($)   |"<<std::endl;
     for(int i = 0; i < n; i++){
         if(strlen(kho[i].tenhang) == 0) continue; // Chỉ hiển thị mặt hàng có tên
         if(i < 10){
@@ -153,6 +164,8 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
         else if(i == 100){
             printf("|%d|", i);
         }
+        int ma = kho[i].code.length();
+        std::cout << " " << kho[i].code << std::setw(6 - ma) << "|";
         int a = strlen(kho[i].tenhang);
         std::cout << kho[i].tenhang << std::setw(24 - a) << "|";
         int b = cnt(kho[i].soluong);
@@ -160,26 +173,20 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
         int c = cnt(kho[i].giathanh);
         std::cout << std::fixed << kho[i].giathanh << " " << std::setw(13 - c) << "|"<<std::endl;
     }
-    std::cout << "$-----$-----------------------$----------------$-------------------$\n" << std::endl;
+    std::cout << "$-----$------$-----------------------$----------------$-------------------$\n" << std::endl;
     std::cout << RESET;
-    std::cout << YELLOW << "Tong so tien hang co trong kho bay gio la:" << costofwh() << RESET << std::endl;
+    std::cout << YELLOW << "Tong so tien hang co trong kho bay gio la: " << costofwh() << RESET << std::endl << std::endl;
     for(int i = 0; i < n; i++){
         if(kho[i].soluong < 20 && strlen(kho[i].tenhang) != 0){
-            std::cout << RED << "INFORM: Mat hang " << kho[i].tenhang << " trong kho qua it de duy tri nhu cau" << std::endl << RESET;
+            std::cout << RED << "INFORM: Mat hang ' " << kho[i].tenhang << " ' trong kho qua it de duy tri nhu cau\n" << std::endl << RESET;
         }
     }
 }
-void logOperation(const std::string& operation) {
-    std::ofstream logFile("log.txt", std::ios::app);
-    if (logFile.is_open()) {
-        logFile << operation << std::endl;
-    }
-    logFile.close();
-}
 void xuatkho() {// hàm xuất kho bằng code
     taokho();
+    
     std::string code;
-    std::cout << "Nhap ma san pham: ";
+    std::cout << YELLOW << "Nhap ma san pham xuat kho: " << RESET;
     std::cin >> code;
 
     bool found = false;
@@ -189,27 +196,28 @@ void xuatkho() {// hàm xuất kho bằng code
             if (i > 0 && kho[i].code == kho[i - 1].code) {
                 continue;
             }
-
             if (i < somathang() - 1 && kho[i].code == kho[i + 1].code) {
-                std::cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
+                std::cout << RED << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: " << RESET;
                 std::string Name;
                 std::cin.ignore();
                 getline(std::cin, Name);
-                
-                
                 bool checkname = false;
                 for (int j = i; j < somathang(); j++) {
                     if (strcmp(kho[j].tenhang, Name.c_str()) == 0 && kho[j].code == code) {
                         checkname = true;
-                        std::cout<<"Ten hang: "<<kho[j].tenhang<<std::endl<<"So Luong: "<<kho[j].soluong<<std::endl<<"Gia: "<<kho[j].giathanh<<std::endl;
+                        
                         std::cout << "Nhap so luong can xuat: ";
                         int quantity;
                         std::cin >> quantity;                        
                         if (quantity > 0 && quantity <= kho[j].soluong) {
                             kho[j].soluong -= quantity;
                             std::cout << "Da xuat " << quantity << " san pham." << std::endl;
-                        } else {
+                        }
+                        else {
                             std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << std::endl;
+                            std::cout << "Yeu cau nhap lai: ";
+
+                            continue;
                         }
                         break; 
                     }
@@ -217,7 +225,8 @@ void xuatkho() {// hàm xuất kho bằng code
                 if (!checkname) {
                     std::cout << "Khong tim thay mat hang voi ten da nhap." << std::endl;
                 }
-            } else {
+            }
+                 else {
                
                 std::cout << "Ten hang: " << kho[i].tenhang << std::endl;
                 std::cout << "So luong: " << kho[i].soluong << std::endl;
@@ -289,9 +298,6 @@ void timee(){
  tm *ltm = localtime(&now);
  std::cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << std::endl;
 }
-
-
-
 
 void deletefile() {
     std::ofstream logFile("log.txt", std::ios::trunc);
@@ -368,10 +374,9 @@ void laythongtinsanpham(const std::string& code) {
     for (int i = 0; i < somathang(); i++) {
         if (kho[i].code == code) {
             found = true;
-            std::cout << "Ten hang: " << kho[i].tenhang << std::endl;
+            std::cout << GREEN << "Ten hang: " << kho[i].tenhang << std::endl;
             std::cout << "So luong: " << kho[i].soluong << std::endl;
-            std::cout << "Gia thanh: " << kho[i].giathanh << std::endl;
-            
+            std::cout << "Gia thanh: " << kho[i].giathanh << RESET << std::endl;
         }
     }
     if (!found) {
@@ -386,15 +391,15 @@ int main() {
         std::cout << "|  3.NHAP HANG VAO KHO                               |" << std::endl;
         std::cout << "|  4.SAP XEP                                         |" << std::endl;
         std::cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << std::endl;
+        std::cout << "|  6.XEM LICH SU XUAT NHAP HANG                     |" << std::endl;
         std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
-        std::cout << "|  10.XEM LOG                                        |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
         std::cout << "SELECT OPTION: " << RESET;
         int lc;
         std::cin >> lc;
         if(lc == 1){
             taokho();
-            hienthikho(10);
+            hienthikho(somathang());
             //FINISHED
         }
         else if(lc == 2){
@@ -405,27 +410,44 @@ int main() {
             xuatkho();
         }
         else if(lc == 3){
+            std::string timeMsg;
+            timee(timeMsg);
+            logOperation(timeMsg);
             nhapkho();
         }
         else if(lc == 4){
-        std::cout << "________________LUA CHON CACH SAP XEP_________________" << std::endl;
-        std::cout << "|  1.SAP XEP THEO GIA TIEN GIAM DAN                  |" << std::endl;
-        std::cout << "|  2.SAP XEP THEO GIA TIEN TANG DAN                  |" << std::endl;
-        std::cout << "|  3.SAP XEP THEO SO LUONG GIAM DAN                  |" << std::endl;
-        std::cout << "|  4.SAP XEP THEO SO LUONG TANG DAN                  |" << std::endl;
-        std::cout << "|  5.THOAT                                           |" << std::endl;
-        std::cout << "!____________________________________________________!" << std::endl;
-        std::cout << "SELECT OPTION: ";
-			int check ;
-            std::cin >> check;
-            if(check ==1) check1();
-			else if (check == 2) check2();
-			else if (check == 3) check3();
-			else if (check == 4) check4();
-			else if (check == 5){
-				std::cout<< "MOI BAN CHON CAC CHUC NANG KHAC"<<std::endl;
-			}
-    }   
+            while(1){
+                std::cout << "________LUA CHON CACH SAP XEP_________" << std::endl;
+                std::cout << "|  1.SAP XEP THEO GIA TIEN GIAM DAN  |" << std::endl;
+                std::cout << "|  2.SAP XEP THEO GIA TIEN TANG DAN  |" << std::endl;
+                std::cout << "|  3.SAP XEP THEO SO LUONG GIAM DAN  |" << std::endl;
+                std::cout << "|  4.SAP XEP THEO SO LUONG TANG DAN  |" << std::endl;
+                std::cout << "|  5.THOAT                           |" << std::endl;
+                std::cout << "!____________________________________!" << std::endl;
+                std::cout << "SELECT OPTION: ";
+                    int check ;
+                    std::cin >> check;
+                    if(check ==1){
+                        check1();
+                        continue;
+                    }
+                    else if (check == 2){
+                        check2();
+                        continue;
+                    }
+                    else if (check == 3) {
+                        check3();
+                        continue;
+                    }
+                    else if (check == 4) {
+                        check4();
+                        continue;
+                    }
+                    else if (check == 5){
+                        std::cout<< "MOI BAN CHON CAC CHUC NANG KHAC"<<std::endl;
+                    }
+                }   
+        }
         else if (lc == 5) {
             taokho();
             std::string code;
@@ -439,7 +461,7 @@ int main() {
         else if(lc == 0){
             deletefile();
             //FINISHED
-            std::cout << "*************   HE THONG DA DONG   *************"<<std::endl;
+            std::cout << YELLOW << "*************   HE THONG DA DONG   *************"<<RESET << std::endl;
             return 0;
         }
     }
