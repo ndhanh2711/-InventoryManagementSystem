@@ -73,7 +73,6 @@ int cnt(int n){ //Hàm tính độ dài của 1 số để căn lề bẳng sả
     }
     return count;
 }
-
 void taokho() {
     // Khởi tạo các giá trị cho mỗi mặt hàng trong kho
     strcpy(kho[0].tenhang, "Kem danh rang");
@@ -126,7 +125,6 @@ void taokho() {
     kho[9].giathanh = 100000;
     kho[9].code = generateCode(kho[9].tenhang);
 }
-
 int somathang(){
     // tính số mặt hàng trong kho
     int cnt = 0;
@@ -140,7 +138,6 @@ int somathang(){
     }
     return cnt;
 }
-
 long long costofwh(){
     long long cost = 0;
     for(int i = 0; i < somathang(); i++){
