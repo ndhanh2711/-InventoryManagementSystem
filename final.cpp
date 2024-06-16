@@ -16,19 +16,18 @@
                 #define BLUE    "\033[34m"
                 #define MAGENTA "\033[35m"
                 #define CYAN    "\033[36m"
-using namespace std; //để tạm đỡ phải gõ std::, sau nhớ xoá đi
 struct mathang{
     char tenhang[100];
     int soluong;
     double giathanh;
     char codeitem;
-    string code;
+    std::string code;
 };
 typedef struct mathang mathang;
 std::vector<mathang> kho(100);
 
-string generateCode(const string& name) { // hàm lấy code từ tên sản phẩm
-    string code = "";
+std::string generateCode(const std::string& name) { // hàm lấy code từ tên sản phẩm
+    std::string code = "";
     bool isNewWord = true;
     for (size_t i = 0; i < name.length(); ++i) {
         char c = name[i];
@@ -179,9 +178,9 @@ void logOperation(const std::string& operation) {
 }
 void xuatkho() {// hàm xuất kho bằng code
     taokho();
-    string code;
-    cout << "Nhap ma san pham: ";
-    cin >> code;
+    std::string code;
+    std::cout << "Nhap ma san pham: ";
+    std::cin >> code;
 
     bool found = false;
     for (int i = 0; i < somathang(); i++) {
@@ -192,53 +191,53 @@ void xuatkho() {// hàm xuất kho bằng code
             }
 
             if (i < somathang() - 1 && kho[i].code == kho[i + 1].code) {
-                cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
-                string Name;
-                cin.ignore();
-                getline(cin, Name);
+                std::cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
+                std::string Name;
+                std::cin.ignore();
+                getline(std::cin, Name);
                 
                 
                 bool checkname = false;
                 for (int j = i; j < somathang(); j++) {
                     if (strcmp(kho[j].tenhang, Name.c_str()) == 0 && kho[j].code == code) {
                         checkname = true;
-                        cout<<"Ten hang: "<<kho[j].tenhang<<endl<<"So Luong: "<<kho[j].soluong<<endl<<"Gia: "<<kho[j].giathanh<<endl;
-                        cout << "Nhap so luong can xuat: ";
+                        std::cout<<"Ten hang: "<<kho[j].tenhang<<std::endl<<"So Luong: "<<kho[j].soluong<<std::endl<<"Gia: "<<kho[j].giathanh<<std::endl;
+                        std::cout << "Nhap so luong can xuat: ";
                         int quantity;
-                        cin >> quantity;                        
+                        std::cin >> quantity;                        
                         if (quantity > 0 && quantity <= kho[j].soluong) {
                             kho[j].soluong -= quantity;
-                            cout << "Da xuat " << quantity << " san pham." << endl;
+                            std::cout << "Da xuat " << quantity << " san pham." << std::endl;
                         } else {
-                            cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << endl;
+                            std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << std::endl;
                         }
                         break; 
                     }
                 }
                 if (!checkname) {
-                    cout << "Khong tim thay mat hang voi ten da nhap." << endl;
+                    std::cout << "Khong tim thay mat hang voi ten da nhap." << std::endl;
                 }
             } else {
                
-                cout << "Ten hang: " << kho[i].tenhang << endl;
-                cout << "So luong: " << kho[i].soluong << endl;
-                cout << "Gia thanh: " << kho[i].giathanh << endl;
+                std::cout << "Ten hang: " << kho[i].tenhang << std::endl;
+                std::cout << "So luong: " << kho[i].soluong << std::endl;
+                std::cout << "Gia thanh: " << kho[i].giathanh << std::endl;
                 int quantity;
-                cout << "Nhap so luong can xuat: ";
-                cin >> quantity;            
+                std::cout << "Nhap so luong can xuat: ";
+                std::cin >> quantity;            
                 if (quantity > 0 && quantity <= kho[i].soluong) {
                     kho[i].soluong -= quantity;
-                    cout << "Da xuat " << quantity << " san pham." << endl;
+                    std::cout << "Da xuat " << quantity << " san pham." << std::endl;
                 } else {
-                    cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << endl;
+                    std::cout << "So luong nhap vao khong hop le hoac khong du so luong trong kho." << std::endl;
                 }
             }
         }
     }
     if (!found) {
-        cout << "Khong tim thay san pham voi ma nay." << endl;
+        std::cout << "Khong tim thay san pham voi ma nay." << std::endl;
     }
-    cout << "CAP NHAT KHO HANG HIEN TAI" << endl;
+    std::cout << "CAP NHAT KHO HANG HIEN TAI" << std::endl;
     hienthikho(somathang());
 }
 
@@ -288,7 +287,7 @@ void baomat(){
 void timee(){
     time_t now = time(0);
  tm *ltm = localtime(&now);
- cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << endl;
+ std::cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << std::endl;
 }
 
 
@@ -321,11 +320,11 @@ void check1() {
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].giathanh < kho[j].giathanh) {
-                swap(kho[i], kho[j]);
+                std::swap(kho[i], kho[j]);
             }
         }
     }
-    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA GIAM DAN:" << endl;
+    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA GIAM DAN:" << std::endl;
     hienthikho(somathang());
 }
 void check2() {
@@ -333,11 +332,11 @@ void check2() {
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].giathanh > kho[j].giathanh) {
-                swap(kho[i], kho[j]);
+                std::swap(kho[i], kho[j]);
             }
         }
     }
-    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA TANG DAN:" << endl;
+    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA TANG DAN:" << std::endl;
     hienthikho(somathang());
 }
 void check3() {
@@ -345,11 +344,11 @@ void check3() {
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].soluong < kho[j].soluong) {
-                swap(kho[i], kho[j]);
+                std::swap(kho[i], kho[j]);
             }
         }
     }
-    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG GIAM DAN:" << endl;
+    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG GIAM DAN:" << std::endl;
     hienthikho(somathang());
 }
 void check4() {
@@ -357,26 +356,26 @@ void check4() {
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].soluong > kho[j].soluong) {
-                swap(kho[i], kho[j]);
+                std::swap(kho[i], kho[j]);
             }
         }
     }
-    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG TANG DAN:" << endl;
+    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG TANG DAN:" << std::endl;
     hienthikho(somathang());
 }
-void laythongtinsanpham(const string& code) {
+void laythongtinsanpham(const std::string& code) {
     bool found = false;
     for (int i = 0; i < somathang(); i++) {
         if (kho[i].code == code) {
             found = true;
-            cout << "Ten hang: " << kho[i].tenhang << endl;
-            cout << "So luong: " << kho[i].soluong << endl;
-            cout << "Gia thanh: " << kho[i].giathanh << endl;
+            std::cout << "Ten hang: " << kho[i].tenhang << std::endl;
+            std::cout << "So luong: " << kho[i].soluong << std::endl;
+            std::cout << "Gia thanh: " << kho[i].giathanh << std::endl;
             
         }
     }
     if (!found) {
-        cout << "Khong tim thay san pham voi ma nay." << endl;
+        std::cout << "Khong tim thay san pham voi ma nay." << std::endl;
     }
 }
 int main() {
@@ -386,7 +385,7 @@ int main() {
         std::cout << "|  2.XUAT KHO                                        |" << std::endl;
         std::cout << "|  3.NHAP HANG VAO KHO                               |" << std::endl;
         std::cout << "|  4.SAP XEP                                         |" << std::endl;
-        std::cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << endl;
+        std::cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << std::endl;
         std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
         std::cout << "|  10.XEM LOG                                        |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
@@ -409,30 +408,29 @@ int main() {
             nhapkho();
         }
         else if(lc == 4){
-        cout << "Chon 1 de sap xep theo gia tien giam dan, chon 2 de sap xep theo gia tien tang dan, chon 3 de sap xep theo so luong giam dan, chon 4 de sap xep theo so luong tang dan"<< endl;
-        cout << "________________LUA CHON CACH SAP XEP_________________" << endl;
-        cout << "|  1.SAP XEP THEO GIA TIEN GIAM DAN                  |" << endl;
-        cout << "|  2.SAP XEP THEO GIA TIEN TANG DAN                  |" << endl;
-        cout << "|  3.SAP XEP THEO SO LUONG GIAM DAN                  |" << endl;
-        cout << "|  4.SAP XEP THEO SO LUONG TANG DAN                  |" << endl;
-        cout << "|  5.THOAT                                           |" << endl;
-        cout << "!____________________________________________________!" << endl;
-        cout << "SELECT OPTION: ";
+        std::cout << "________________LUA CHON CACH SAP XEP_________________" << std::endl;
+        std::cout << "|  1.SAP XEP THEO GIA TIEN GIAM DAN                  |" << std::endl;
+        std::cout << "|  2.SAP XEP THEO GIA TIEN TANG DAN                  |" << std::endl;
+        std::cout << "|  3.SAP XEP THEO SO LUONG GIAM DAN                  |" << std::endl;
+        std::cout << "|  4.SAP XEP THEO SO LUONG TANG DAN                  |" << std::endl;
+        std::cout << "|  5.THOAT                                           |" << std::endl;
+        std::cout << "!____________________________________________________!" << std::endl;
+        std::cout << "SELECT OPTION: ";
 			int check ;
-            cin >> check;
+            std::cin >> check;
             if(check ==1) check1();
 			else if (check == 2) check2();
 			else if (check == 3) check3();
 			else if (check == 4) check4();
 			else if (check == 5){
-				cout<< "MOI BAN CHON CAC CHUC NANG KHAC"<<endl;
+				std::cout<< "MOI BAN CHON CAC CHUC NANG KHAC"<<std::endl;
 			}
     }   
         else if (lc == 5) {
             taokho();
-            string code;
-            cout << "Nhap ma san pham: ";
-            cin >> code;
+            std::string code;
+            std::cout << "Nhap ma san pham: ";
+            std::cin >> code;
             laythongtinsanpham(code);
         }
         else if(lc == 10){
