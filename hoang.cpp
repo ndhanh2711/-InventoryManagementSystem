@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <vector>
 #include <sstream>
+#include <fstream>
+#include <limits>
                 #define RESET   "\033[0m"
                 #define RED     "\033[31m"
                 #define GREEN   "\033[32m"
@@ -182,11 +184,14 @@ void xuatkho() {
             if (i > 0 && kho[i].code == kho[i - 1].code) {
                 continue;
             }
+
             if (i < somathang() - 1 && kho[i].code == kho[i + 1].code) {
                 cout << "Co nhieu mat hang cung ma code, vui long nhap day du ten mat hang: ";
                 string Name;
                 cin.ignore();
                 getline(cin, Name);
+                
+                
                 bool checkname = false;
                 for (int j = i; j < somathang(); j++) {
                     if (strcmp(kho[j].tenhang, Name.c_str()) == 0 && kho[j].code == code) {
@@ -281,7 +286,7 @@ void baomat(){
     }
     cout << RESET;
 }
-void check() {
+void check1() {
 	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
@@ -297,12 +302,36 @@ void check2() {
 	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
+            if (kho[i].giathanh > kho[j].giathanh) {
+                swap(kho[i], kho[j]);
+            }
+        }
+    }
+    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA TANG DAN:" << endl;
+    hienthikho(somathang());
+}
+void check3() {
+	taokho();
+    for (int i = 0; i < somathang() - 1; i++) {
+        for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].soluong < kho[j].soluong) {
                 swap(kho[i], kho[j]);
             }
         }
     }
-    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA GIAM DAN:" << endl;
+    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG GIAM DAN:" << endl;
+    hienthikho(somathang());
+}
+void check4() {
+	taokho();
+    for (int i = 0; i < somathang() - 1; i++) {
+        for (int j = i + 1; j < somathang(); j++) {
+            if (kho[i].soluong > kho[j].soluong) {
+                swap(kho[i], kho[j]);
+            }
+        }
+    }
+    cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG TANG DAN:" << endl;
     hienthikho(somathang());
 }
 void laythongtinsanpham(const string& code) {
@@ -320,50 +349,83 @@ void laythongtinsanpham(const string& code) {
         cout << "Khong tim thay san pham voi ma nay." << endl;
     }
 }
+ofstream logFile; // Ð?i tu?ng d? ghi file log
+
+void logActivity(const string& activity) {
+    logFile.open("nghich.txt", ios::app); // M? file log d? ghi thêm n?i dung
+
+    if (!logFile.is_open()) {
+        cerr << "Khong the mo file log." << endl;
+        return;
+    }
+
+    logFile << activity << endl; // Ghi ho?t d?ng vào file log
+    logFile.close(); // Ðóng file log sau khi ghi
+}
+
 int main() {
-    while(1){
+    logFile.open("nghich.txt", ios::app); // M? file log d? ghi thêm n?i dung
+
+    if (!logFile.is_open()) {
+        cerr << "Khong the mo file log." << endl;
+        return 1;
+    }
+
+    while (true) {
         cout << MAGENTA << "______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______" << endl;
         cout << "|  1.XEM THONG TIN MAT HANG TON KHO                  |" << endl;
         cout << "|  2.XUAT KHO                                        |" << endl;
         cout << "|  3.NHAP HANG VAO KHO                               |" << endl;
-        cout << "|  4.SAP XEP THEO GIA                                |" << endl;
-        cout << "|  5.SAP XEP THEO SO LUONG.                          |" << endl;
-        cout << "|  6.KIEM TRA HANG THEO MA SAN PHAM.                 |" << endl;
-        cout << "|  7.EXIT THE SYSTEM.                                |" << endl;
+        cout << "|  4.SAP XEP                                         |" << endl;
+        cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << endl;
+        cout << "|  6.EXIT THE SYSTEM.                                |" << endl;
         cout << "!____________________________________________________!" << endl;
         cout << "SELECT OPTION: " << RESET;
         int lc;
         cin >> lc;
-        if(lc == 1){
+         if (cin.fail()) {
+            cerr << "L?i khi nh?p l?a ch?n. Vui lòng nh?p l?i." << endl;
+            cin.clear(); // Xóa tr?ng thái l?i c?a cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Xóa b? d? li?u còn th?a trong b? d?m d?u vào
+            continue; // Quay l?i vòng l?p d? yêu c?u nh?p l?i
+        }
+                cin.ignore(); // Xóa b? ký t? newline còn th?a trong b? d?m d?u vào
+
+        if (lc == 1) {
+            logActivity("Nguoi dung da chon xem thong tin mat hang ton kho.");
             taokho();
-            hienthikho(10);
-            //FINISHED
-        }
-        else if(lc == 2){
-           //FINISHED
+            hienthikho(somathang());
+        } else if (lc == 2) {
+            logActivity("Nguoi dung da chon xuat kho.");
             xuatkho();
-        }
-        else if(lc == 3){
+        } else if (lc == 3) {
+            logActivity("Nguoi dung da chon nhap hang vao kho.");
             nhapkho();
-        }
-        else if(lc == 4){
-            check();
-        }
-        else if(lc == 5){
-        	check2();
-		}
-		else if (lc == 6) {
-		taokho();
-        string code;
-        cout << "Nhap ma san pham: ";
-        cin >> code;
-        laythongtinsanpham(code);
+        } else if (lc == 4) {
+            	cout << "Chon 1 de sap xep theo gia tien giam dan, chon 2 de sap xep theo gia tien tang dan, chon 3 de sap xep theo so luong giam dan, chon 4 de sap xep theo so luong tang dan"<< endl;
+            int check ;
+            cin >> check;
+            if(check ==1){
+			 check1();
+            logActivity("Nguoi dung da sap xep theo gia tien giam dan");}
+			else if (check == 2) {
+			check2();
+			logActivity("Nguoi dung da sap xep theo gia tien tang dan");}
+			else if (check == 3) check3();
+			else if (check == 4) check4();
     }
-        else if(lc == 0){
-            //FINISHED
-            cout << "*************   HE THONG DA DONG   *************"<<endl;
-            return 0;
+        else if (lc == 5) {
+            logActivity("Nguoi dung da kiem tra hang theo ma san pham.");
+            string code;
+            cout << "Nhap ma san pham: ";
+            cin >> code;
+            laythongtinsanpham(code);
+        } else if (lc == 6) {
+            cout << "*************   HE THONG DA DONG   *************" << endl;
+            break;
         }
     }
+    logFile.close(); // Ðóng file log khi k?t thúc chuong trình
+
     return 0;
 }
