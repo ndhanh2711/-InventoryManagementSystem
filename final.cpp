@@ -6,6 +6,9 @@
 #include <iomanip>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <ctime>
+#include <sstream>
                 #define RESET   "\033[0m"
                 #define RED     "\033[31m"
                 #define GREEN   "\033[32m"
@@ -140,7 +143,13 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
         }
     }
 }
-
+void logOperation(const std::string& operation) {
+    std::ofstream logFile("log.txt", std::ios::app);
+    if (logFile.is_open()) {
+        logFile << operation << std::endl;
+    }
+    logFile.close();
+}
 void xuatkho(){
     taokho();
     int xuat;
@@ -212,7 +221,37 @@ void baomat(){
     }
     std::cout << RESET;
 }
+void timee(){
+    time_t now = time(0);
+ tm *ltm = localtime(&now);
+ cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << endl;
+}
 
+
+
+
+void deletefile() {
+    std::ofstream logFile("log.txt", std::ios::trunc);
+    logFile.close();
+}
+void timee(std::string& timeStr) {
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+
+    std::stringstream ss;
+    ss << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year
+       << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
+
+    timeStr = ss.str();
+    
+}
+void clearLogFile() {
+    std::ofstream logFile("log.txt", std::ios::trunc);
+    logFile.close();
+}
+void log(){
+
+}
 int main() {
     while(1){
         std::cout << MAGENTA << "______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______" << std::endl;
@@ -221,6 +260,7 @@ int main() {
         std::cout << "|  3.NHAP HANG VAO KHO                               |" << std::endl;
         std::cout << "|  4.SAP XEP THEO YEU CAU                            |" << std::endl;
         std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
+        std::cout << "|  10.XEM LOG                                        |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
         std::cout << "SELECT OPTION: " << RESET;
         int lc;
@@ -231,6 +271,9 @@ int main() {
             //FINISHED
         }
         else if(lc == 2){
+            std::string timeMsg;
+            timee(timeMsg);
+            logOperation(timeMsg);
             //FINISHED
             xuatkho();
         }
@@ -240,7 +283,11 @@ int main() {
         else if(lc == 4){
             // Implement sorting functionality here
         }
+        else if(lc == 10){
+            log();
+        }
         else if(lc == 0){
+            deletefile();
             //FINISHED
             std::cout << "*************   HE THONG DA DONG   *************"<<std::endl;
             return 0;
