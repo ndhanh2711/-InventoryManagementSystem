@@ -180,7 +180,6 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
     }
 }
 void xuatkho() {
-    taokho();
     std::string code;
     int n;
     std::cout << CYAN << "Nhap so luong mat hang can xuat kho: ";
@@ -272,7 +271,6 @@ void xuatkho() {
     hienthikho(somathang());
 }
 void nhapkho(){
-    taokho();
     std::cout << GREEN << "So mat hang co trong kho la: " << RESET;
             std::cout << somathang() << std::endl;
             std::cout << MAGENTA << "SO LUONG MAT HANG MUON THEM VAO KHO: " << RESET;
@@ -411,6 +409,7 @@ void laythongtinsanpham(const std::string& code) {
     }
 }
 int main() {
+    taokho();
     while(1){
         std::cout << MAGENTA << "______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______" << std::endl;
         std::cout << "|  1.XEM THONG TIN MAT HANG TON KHO                  |" << std::endl;
@@ -425,7 +424,6 @@ int main() {
         int lc;
         std::cin >> lc ;
         if(lc == 1){
-            taokho();
             hienthikho(somathang());
             //FINISHED
         }
