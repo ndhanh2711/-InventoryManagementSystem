@@ -315,12 +315,6 @@ void baomat(){
         }
     }
 }
-void timee(){
-    //hàm lấy thời gian thực
-    time_t now = time(0);
- tm *ltm = localtime(&now);
- std::cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << std::endl;
-}
 void deletefile() {
     //hàm xoá thông tin trong file sau khi kết thúc chương trình
     std::ofstream logFile("log.txt", std::ios::trunc);
@@ -419,7 +413,8 @@ void laythongtinsanpham(const std::string& code) {
     }
 }
 int main() {
-    baomat();
+    baomat(); //đăng nhập để vào hệ thống
+    deletefile(); //xoá thông tin còn dư trong file ghi lịch sử nếu còn bị tồn lại từ trước
     taokho();
     while(1){
         std::cout << MAGENTA << "______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______" << std::endl;
