@@ -17,6 +17,7 @@
                 #define MAGENTA "\033[35m"
                 #define CYAN    "\033[36m"
 struct mathang{
+//định nghĩa thông tin mặt hàng
     char tenhang[100];
     int soluong;
     double giathanh;
@@ -140,6 +141,7 @@ int somathang(){
     return cnt;
 }
 long long costofwh(){
+    //tính tổng số tiền hàng có trong kho
     long long cost = 0;
     for(int i = 0; i < somathang(); i++){
         cost += kho[i].soluong * kho[i].giathanh;
@@ -174,6 +176,7 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
     std::cout << RESET;
     std::cout << YELLOW << "Tong so tien hang co trong kho bay gio la: " << costofwh() << RESET << std::endl << std::endl;
     for(int i = 0; i < n; i++){
+        //kiểm tra và thông báo các mặt hàng có dưới 20 sản phẩm
         if(kho[i].soluong < 20 && strlen(kho[i].tenhang) != 0){
             std::cout << RED << "INFORM: Mat hang ' " << kho[i].tenhang << " ' trong kho qua it de duy tri nhu cau\n" << std::endl << RESET;
         }
@@ -276,6 +279,8 @@ void nhapkho(){
             std::cout << MAGENTA << "SO LUONG MAT HANG MUON THEM VAO KHO: " << RESET;
             int n;
             std::cin >> n;
+            //yêu cầu nhập số mặt hàng cần thêm vào kho
+            //mỗi mặt hàng nhập vào sẽ gọi hàm nhập ra 1 lần
             for(int i = 0; i < n; i++){
                 std::cout << "NHAP THONG TIN MAT HANG SO " << somathang() << ": ";
                 nhap2(kho, somathang());
@@ -284,24 +289,24 @@ void nhapkho(){
             hienthikho(somathang());
         }
 void baomat(){
-    std::cout << RED;
+    //nhập thông tin tài khoản mật khẩu cho hệ thống bằng cách kiểm tra trùng chuỗi kí tự
     std::string a = "alester";
     std::string b = "top1thaibinh";
-    std::cout << "LOG IN(Use the English keyboard to type.)"<<std::endl;
+    std::cout << GREEN << "LOG IN(Use the English keyboard to type.)"<< RESET << std::endl;
     while(1){
-        std::cout << "User name:";
+        std::cout << GREEN << "User name:" << RESET;
         std::string tk;
         std::cin >> tk;
         if(a.compare(tk) != 0){
-            std::cout << "Wrong account, please enter again." << std::endl;
+            std::cout << RED << "Wrong account, please enter again." << RESET << std::endl;
             continue;
         }
         else{
-            std::cout << "Password:";
+            std::cout << GREEN << "Password:" << RESET;
             std::string mk;
             std::cin >> mk;
             if(mk.compare(b) != 0){
-                std::cout << "Wrong password, please re-enter." << std::endl;
+                std::cout << RED << "Wrong password, please re-enter." << RESET << std::endl;
                 continue;
             }
             else{
@@ -309,14 +314,15 @@ void baomat(){
             }
         }
     }
-    std::cout << RESET;
 }
 void timee(){
+    //hàm lấy thời gian thực
     time_t now = time(0);
  tm *ltm = localtime(&now);
  std::cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << std::endl;
 }
 void deletefile() {
+    //hàm xoá thông tin trong file sau khi kết thúc chương trình
     std::ofstream logFile("log.txt", std::ios::trunc);
     logFile.close();
 }
@@ -331,10 +337,12 @@ void timee(std::string& timeStr) {
     
 }
 void clearLogFile() {
+    //đóng file sau khi sử dụng
     std::ofstream logFile("log.txt", std::ios::trunc);
     logFile.close();
 }
 void showlog(){
+    //hàm ghi file, hiển thị các nội dung có trong file để xem lịch sử xuất nhập hàng
     std::ifstream logFile("log.txt");
     if (logFile.is_open()) {
         std::string line;
@@ -347,6 +355,7 @@ void showlog(){
     }
 }
 void check1() {
+    //các hàm sắp xếp
 	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
@@ -395,6 +404,7 @@ void check4() {
     hienthikho(somathang());
 }
 void laythongtinsanpham(const std::string& code) {
+    //check thông tin sản phẩm cần tìm bằng cách nhập mã
     bool found = false;
     for (int i = 0; i < somathang(); i++) {
         if (kho[i].code == code) {
@@ -409,6 +419,7 @@ void laythongtinsanpham(const std::string& code) {
     }
 }
 int main() {
+    baomat();
     taokho();
     while(1){
         std::cout << MAGENTA << "______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______" << std::endl;
