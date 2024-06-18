@@ -183,6 +183,39 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
         }
     }
 }
+class Mathang {
+public:
+    virtual void xuatHang(int quantity) = 0;
+    virtual void nhapHang(int quantity) = 0;
+    virtual void xoaHang() = 0;
+    virtual void dieuChinhGia(double newPrice) = 0;
+    virtual ~Mathang() = default;
+};
+class MatHang : public Mathang {
+    mathang &mh;
+public:
+    MatHang(mathang &m) : mh(m) {}
+
+    void xuatHang(int quantity) override {
+            mh.soluong -= quantity;
+            std::cout << "Da xuat " << quantity << " san pham dien tu: " << mh.tenhang << std::endl;
+    }
+
+    void nhapHang(int quantity) override {
+        mh.soluong += quantity;
+        std::cout << "Da nhap " << quantity << " san pham dien tu: " << mh.tenhang << std::endl;
+    }
+
+    void xoaHang() override {
+        mh.soluong = 0;
+        std::cout << "San pham dien tu da duoc xoa khoi kho: " << mh.tenhang << std::endl;
+    }
+
+    void dieuChinhGia(double newPrice) override {
+        mh.giathanh = newPrice;
+        std::cout << "Gia moi cho san pham dien tu la " << newPrice << " VND." << std::endl;
+    }
+};
 void xuatkho() {
     std::string code;
     int n;    
@@ -242,7 +275,8 @@ void xuatkho() {
                                 std::cin.ignore();
 
                                 if (quantity > 0 && quantity <= kho[k].soluong) {
-                                    kho[k].soluong -= quantity;
+                                    MatHang mh(kho[k]);
+                                    mh.xuatHang(quantity);
                                     std::cout << "Da xuat " << quantity << " san pham." << std::endl;
 
                                     // Ghi log sau khi xuất hàng
@@ -270,7 +304,8 @@ void xuatkho() {
                         std::cin.ignore(); 
 
                         if (quantity > 0 && quantity <= kho[j].soluong) {
-                            kho[j].soluong -= quantity;
+                            MatHang mh(kho[j]);
+                            mh.xuatHang(quantity);
                             std::cout << RESET << MAGENTA << "Da xuat " << quantity << " san pham." << RESET << std::endl;
 
                             // Ghi log sau khi xuất hàng
@@ -292,79 +327,138 @@ void xuatkho() {
     std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
     hienthikho(somathang());
 }
-void nhapkho() {
-    std::cout << GREEN << "So mat hang co trong kho la: " << RESET;
+   
+void nhapkho(){
+    std::cout << "So mat hang co trong kho la: ";
     std::cout << somathang() << std::endl;
     std::cout << "SO LUONG MAT HANG MUON THEM VAO KHO: ";
     int n;
-    while (true) {
-        std::string input;
-        std::cin >> input;
-
-        bool isNumber = true;
-        for (char c : input) {
-            if (!isdigit(c)) {
-                isNumber = false;
-                break;
-            }
-        }
-
-        if (!isNumber) {
-            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } else {
-            n = stoi(input);
-            break; // Ð?u vào h?p l?
-        }
-    }
-
-    // Yêu cầu nhập số mặt hàng cần thêm vào kho
-    // Mỗi mặt hàng nhập vào sẽ gọi hàm nhập ra 1 lần
-    for (int i = 0; i < n; i++) {
-        std::cout << "NHAP THONG TIN MAT HANG SO " << somathang() << ": ";
-        nhap2(kho, somathang());
-    }
-
-    std::cout << RESET << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
-    hienthikho(somathang());
-}
-void xoakho() {
     std::string code;
-    int n;
-    std::cout << CYAN << "Nhap so luong mat hang xoa khoi kho: ";
-    while (true) {
-        std::string input;
-        std::cin >> input;
-
-        bool isNumber = true;
-        for (char c : input) {
-            if (!isdigit(c)) {
-                isNumber = false;
-                break;
-            }
-        }
-
-        if (!isNumber) {
-            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } else {
-            n = stoi(input);
-            break; // Ð?u vào h?p l?
-        }
-    }
-    std::cin.ignore(); 
-
-    for (int i = 0; i < n; i++) { 
-        std::cout << "Nhap ma san pham " << i + 1 << ": " << RESET;
-        std::getline(std::cin, code); 
+    std::cin >> n;
+    int check = 0;
+    std::cout << "________________LUA CHON NHAP KHO_________________" << std::endl;
+    std::cout << "|  1.NHAP HANG DA CO TRONG KHO                    |" << std::endl;
+    std::cout << "|  2.NHAP HANG MOI CHUA CO TRONG KHO              |" << std::endl;
+    std::cout << GREEN << "SELECT OPTION: " << RESET;
+    std::cin>>check;
+    if(check == 1){
+    	for(int i=0;i<n;i++){
+    	std::cout<< "Nhap ma san pham: ";
+    	std::cin >> code;
+        std::cin.ignore(); // X? lý newline character sau khi nh?p mã s?n ph?m
 
         bool found = false;
         for (int j = 0; j < somathang(); j++) {
             if (kho[j].code == code) {
                 found = true;
+                bool checkname = false;
 
+                if (j > 0 && kho[j].code == kho[j - 1].code) {
+                    continue;
+                }
+
+                if (j < somathang() - 1 && kho[j].code == kho[j + 1].code) {
+                    std::cout << RED << "Co nhieu mat hang cung ma don hang, vui long nhap day du ten mat hang: " << RESET;
+                    std::string Name;
+                    getline(std::cin, Name);
+
+                    for (int k = j; k < somathang(); k++) {
+                        if (kho[k].tenhang == Name && kho[k].code == code) {
+                            checkname = true;
+                            std::cout << GREEN << "Ten hang: " << kho[k].tenhang << std::endl;
+                            std::cout << "So Luong: " << kho[k].soluong << std::endl;
+                            std::cout << "Gia: " << kho[k].giathanh << RESET << std::endl;
+                            int quantity;
+                            do {
+                                std::cout << "Nhap so luong can them: ";
+                                std::cin >> quantity;
+                                std::cin.ignore();
+                                MatHang mh(kho[k]);
+                                mh.nhapHang(quantity);
+                                std::cout << RESET << MAGENTA << "Da nhap " << quantity << " san pham." << RESET << std::endl;
+                                break; 
+                            } while (true);
+                            break;
+                        }
+                    }
+                    if (!checkname) {
+                        std::cout << RED << "Khong tim thay mat hang voi ten da nhap." << RESET << std::endl;
+                    }
+                } else {
+                    std::cout << GREEN << "Ten hang: " << kho[j].tenhang << std::endl;
+                    std::cout << "So luong: " << kho[j].soluong << std::endl;
+                    std::cout << "Gia thanh: " << kho[j].giathanh << RESET << std::endl;
+
+                    int quantity;
+                    do {
+                        std::cout << CYAN << "Nhap so luong can xuat: ";
+                        std::cin >> quantity;
+                        std::cin.ignore();                         
+                        MatHang mh(kho[j]);
+                        mh.nhapHang(quantity);
+                        std::cout << RESET << MAGENTA << "Da nhap " << quantity << " san pham." << RESET << std::endl;
+                        break;                        
+                    } while (true);
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            std::cout << RED << "Khong tim thay san pham voi ma nay. Vui long nhap lai." << RESET << std::endl;
+            i--; // Ð? ngu?i dùng nh?p l?i cho mã s?n ph?m không h?p l?
+        }
+    }
+
+    std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
+    hienthikho(somathang());
+}
+	else if(check == 2){
+    int check = 0;
+    for(int i = 0; i < n; i++){
+        printf("NHAP THONG TIN MAT HANG SO %d:\n", somathang());
+        nhap2(kho, somathang());
+    }
+    std::cout << "CAP NHAT KHO HANG HIEN TAI"<<std::endl;
+    hienthikho(somathang());
+}
+}    
+
+
+
+void xoakho() {
+    std::string code;
+    int n;
+    std::cout << "Nhap so luong mat hang xoa khoi kho: ";
+    while (true) {
+        std::string input;
+        std::cin >> input;
+
+        bool isNumber = true;
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isNumber = false;
+                break;
+            }
+        }
+        if (!isNumber) {
+            std::cout << "Dau vao khong dung dinh dang. Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            n = std::stoi(input);
+            break;
+        }
+    }
+    std::cin.ignore();
+
+    for (int i = 0; i < n; i++) {
+        std::cout << "Nhap ma san pham " << i + 1 << ": ";
+        std::getline(std::cin, code);
+
+        bool found = false;
+        for (int j = 0; j < kho.size(); j++) {
+            if (kho[j].code == code) {
+                found = true;
                 bool checkname = false;
                 if (j < somathang() - 1 && kho[j].code == kho[j + 1].code) {
                     std::cout << RED << "Co nhieu mat hang cung ma don hang, vui long nhap day du ten mat hang: " << RESET;
@@ -377,71 +471,39 @@ void xoakho() {
                             std::cout << GREEN << "Ten hang: " << kho[k].tenhang << std::endl;
                             std::cout << "So Luong: " << kho[k].soluong << std::endl;
                             std::cout << "Gia: " << kho[k].giathanh << RESET << std::endl;
-
-                            std::cout << GREEN << "Da xoa san pham " << kho[k].tenhang << " khoi kho." << RESET << std::endl;
-
-                            
-                            for (int l = k; l < somathang() - 1; ++l) {
-                                kho[l] = kho[l + 1];
-                            }
-        
-                            kho[somathang() - 1] = {};
+                            MatHang mh(kho[j]);
+                            mh.xoaHang();
+                            kho.erase(kho.begin() + j);
                             break;
                         }
-                    }
-                    if (!checkname) {
-                        std::cout << RED << "Khong tim thay mat hang voi ten da nhap." << RESET << std::endl;
-                    }
-                } else {
+             }if (!checkname) {
+                std::cout << RED << "Khong tim thay mat hang voi ten da nhap." << RESET << std::endl;
+            }
+        }else {
                     std::cout << GREEN << "Ten hang: " << kho[j].tenhang << std::endl;
                     std::cout << "So luong: " << kho[j].soluong << std::endl;
                     std::cout << "Gia thanh: " << kho[j].giathanh << RESET << std::endl;
-
                     std::cout << GREEN << "Da xoa san pham " << kho[j].tenhang << " khoi kho." << RESET << std::endl;
-
-                    
-                    for (int l = j; l < somathang() - 1; ++l) {
-                        kho[l] = kho[l + 1];
-                    }
-                    
-                    kho[somathang() - 1] = {};
+                    MatHang mh(kho[j]);
+                    mh.xoaHang();
+                    kho.erase(kho.begin() + j);
                     break;
                 }
             }
         }
         if (!found) {
-            std::cout << RED << "Khong tim thay san pham voi ma nay. Vui long nhap lai." << RESET << std::endl;
-        } 
+            std::cout << "Khong tim thay san pham voi ma nay. Vui long nhap lai.\n";
+            i--;
+        }
     }
-
-    std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
+    
+    std::cout << "CAP NHAT KHO HANG HIEN TAI\n";
     hienthikho(somathang());
 }
-
 void dieuchinhgia() {
     int n;
     std::cout << CYAN << "Nhap so luong mat hang can dieu chinh gia: ";
-    while (true) {
-        std::string input;
-        std::cin >> input;
-
-        bool isNumber = true;
-        for (char c : input) {
-            if (!isdigit(c)) {
-                isNumber = false;
-                break;
-            }
-        }
-
-        if (!isNumber) {
-            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } else {
-            n = stoi(input);
-            break; // Ð?u vào h?p l?
-        }
-    }
+    std::cin >> n;
     std::cin.ignore();
 
     for (int i = 0; i < n; ++i) {
@@ -469,11 +531,11 @@ void dieuchinhgia() {
                             std::cout << "Gia: " << kho[k].giathanh << RESET << std::endl;
 
                             std::cout << GREEN << "Nhap gia moi: ";
-                            int giamoi;
-                            std::cin >> giamoi;
-                            std::cin.ignore();
-                            
-                            kho[k].giathanh = giamoi;
+                            int newPrice;
+                            std::cin >> newPrice;
+                            std::cin.ignore();                       
+                            MatHang mh(kho[k]);
+                            mh.dieuChinhGia(newPrice);
                             std::cout << RESET << "Gia moi duoc cap nhat." << std::endl;
                             break;
                         }
@@ -484,24 +546,23 @@ void dieuchinhgia() {
                     std::cout << "Gia thanh: " << kho[j].giathanh << RESET << std::endl;
 
                     std::cout << GREEN << "Nhap gia moi: ";
-                    int giamoi;
-                    std::cin >> giamoi;
+                    int newPrice;
+                    std::cin >> newPrice;
                     std::cin.ignore();
-                    
-                    kho[j].giathanh = giamoi;
+
+                    MatHang mh(kho[j]);
+                    mh.dieuChinhGia(newPrice);
                     std::cout << RESET << "Gia moi duoc cap nhat." << std::endl;
                 }
 
                 break; 
             }
         }
-
         if (!found) {
             std::cout << RED << "Khong tim thay san pham voi ma nay. Vui long nhap lai." << RESET << std::endl;
             --i; 
         }
     }
-
     std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
     hienthikho(somathang());
 }
