@@ -565,50 +565,76 @@ void showlog(){
         std::cerr << "Unable to open log file." << std::endl;
     }
 }
-void check1() {
-    //các hàm sắp xếp
+template <typename Compare>
+void sapxep(mathang kho[], Compare cmp) {
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
-            if (kho[i].giathanh < kho[j].giathanh) {
+            if (cmp(kho[i], kho[j])) {
                 std::swap(kho[i], kho[j]);
             }
         }
     }
-    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA GIAM DAN:" << std::endl;
-    hienthikho(somathang());
 }
-void check2() {
-    for (int i = 0; i < somathang() - 1; i++) {
-        for (int j = i + 1; j < somathang(); j++) {
-            if (kho[i].giathanh > kho[j].giathanh) {
-                std::swap(kho[i], kho[j]);
-            }
+
+// Hàm check để sắp xếp và hiển thị danh sách sản phẩm
+void check() {
+    while (true) {
+        std::cout << BLUE << "________LUA CHON CACH SAP XEP_________" << std::endl;
+        std::cout << "|  1. SAP XEP THEO GIA TIEN GIAM DAN  |" << std::endl;
+        std::cout << "|  2. SAP XEP THEO GIA TIEN TANG DAN  |" << std::endl;
+        std::cout << "|  3. SAP XEP THEO SO LUONG GIAM DAN  |" << std::endl;
+        std::cout << "|  4. SAP XEP THEO SO LUONG TANG DAN  |" << std::endl;
+        std::cout << "|  5. THOAT                           |" << std::endl;
+        std::cout << "!____________________________________!" << RESET << std::endl;
+        std::cout << GREEN << "SELECT OPTION: " << RESET;
+        int check;
+        std::cin >> check;
+
+        switch (check) {
+            case 1:
+                // Sắp xếp theo giá giảm dần
+                std::cout << "DANH SÁCH SẢN PHẨM SAU KHI SẮP XẾP THEO GIÁ GIẢM DẦN:\n";
+                sapxep(kho.data(), [](const mathang& a, const mathang& b) {
+                    return a.giathanh < b.giathanh;
+                });
+                hienthikho(somathang());
+                break;
+
+            case 2:
+                // Sắp xếp theo giá tăng dần
+                std::cout << "DANH SÁCH SẢN PHẨM SAU KHI SẮP XẾP THEO GIÁ TĂNG DẦN:\n";
+                sapxep(kho.data(), [](const mathang& a, const mathang& b) {
+                    return a.giathanh > b.giathanh;
+                });
+                hienthikho(somathang());
+                break;
+
+            case 3:
+                // Sắp xếp theo số lượng giảm dần
+                std::cout << "DANH SÁCH SẢN PHẨM SAU KHI SẮP XẾP THEO SỐ LƯỢNG GIẢM DẦN:\n";
+                sapxep(kho.data(), [](const mathang& a, const mathang& b) {
+                    return a.soluong < b.soluong;
+                });
+                hienthikho(somathang());
+                break;
+
+            case 4:
+                // Sắp xếp theo số lượng tăng dần
+                std::cout << "DANH SÁCH SẢN PHẨM SAU KHI SẮP XẾP THEO SỐ LƯỢNG TĂNG DẦN:\n";
+                sapxep(kho.data(), [](const mathang& a, const mathang& b) {
+                    return a.soluong > b.soluong;
+                });
+                hienthikho(somathang());
+                break;
+
+            case 5:
+                std::cout << YELLOW << "MOI BAN CHON CAC CHUC NANG KHAC" << RESET << std::endl;
+                return; // Thoát khỏi hàm check
+
+            default:
+                std::cout << "Lua chon khong hop le. Vui long chon lai.\n";
         }
     }
-    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO GIA TANG DAN:" << std::endl;
-    hienthikho(somathang());
-}
-void check3() {
-    for (int i = 0; i < somathang() - 1; i++) {
-        for (int j = i + 1; j < somathang(); j++) {
-            if (kho[i].soluong < kho[j].soluong) {
-                std::swap(kho[i], kho[j]);
-            }
-        }
-    }
-    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG GIAM DAN:" << std::endl;
-    hienthikho(somathang());
-}
-void check4() {
-    for (int i = 0; i < somathang() - 1; i++) {
-        for (int j = i + 1; j < somathang(); j++) {
-            if (kho[i].soluong > kho[j].soluong) {
-                std::swap(kho[i], kho[j]);
-            }
-        }
-    }
-    std::cout << "DANH SACH SAN PHAM SAU KHI SAP XEP THEO SO LUONG TANG DAN:" << std::endl;
-    hienthikho(somathang());
 }
 void laythongtinsanpham(const std::string& code) {
     //check thông tin sản phẩm cần tìm bằng cách nhập mã
@@ -685,38 +711,7 @@ int main() {
             nhapkho();
         }
         else if(lc == 4){
-            while(1){
-                std::cout << BLUE << "________LUA CHON CACH SAP XEP_________" << std::endl;
-                std::cout << "|  1.SAP XEP THEO GIA TIEN GIAM DAN  |" << std::endl;
-                std::cout << "|  2.SAP XEP THEO GIA TIEN TANG DAN  |" << std::endl;
-                std::cout << "|  3.SAP XEP THEO SO LUONG GIAM DAN  |" << std::endl;
-                std::cout << "|  4.SAP XEP THEO SO LUONG TANG DAN  |" << std::endl;
-                std::cout << "|  5.THOAT                           |" << std::endl;
-                std::cout << "!____________________________________!" << RESET << std::endl;
-                std::cout << GREEN << "SELECT OPTION: " << RESET;
-                    int check ;
-                    std::cin >> check;
-                    if(check ==1){
-                        check1();
-                        continue;
-                    }
-                    else if (check == 2){
-                        check2();
-                        continue;
-                    }
-                    else if (check == 3) {
-                        check3();
-                        continue;
-                    }
-                    else if (check == 4) {
-                        check4();
-                        continue;
-                    }
-                    else if (check == 5){
-                        std::cout<< YELLOW << "MOI BAN CHON CAC CHUC NANG KHAC"<< RESET << std::endl;
-                        break;
-                    }
-                }   
+            check();
         }
         else if (lc == 5) {
             std::string code;
