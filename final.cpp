@@ -9,6 +9,7 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
+#include <limits>
                 #define RESET   "\033[0m"   //Chuyển đổi mã màu từ mã máy sang chữ
                 #define RED     "\033[31m"
                 #define GREEN   "\033[32m"
@@ -61,7 +62,7 @@ void nhap2(std::vector<mathang>& kho, int n) {  //Hàm nhập thông tin vào kh
     kho[n].code = generateCode(kho[n].tenhang);
     //3 dòng bên dưới để ghi thông tin nhập hàng vào file.txt
     std::ostringstream oss;
-    oss << GREEN << "Nhap    Mat hang: " << kho[n].tenhang << "      So luong: " << kho[n].soluong << "       Gia tien: " << kho[n].giathanh << RESET;
+    oss << GREEN << "       NHAP    Mat hang: " << kho[n].tenhang << "      So luong: " << kho[n].soluong << "       Gia tien: " << kho[n].giathanh << RESET;
     logOperation(oss.str());
     }
 int cnt(int n){ //Hàm tính độ dài của 1 số để căn lề bẳng sản phẩm
@@ -185,10 +186,19 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
 void xuatkho() {
     std::string code;
     int n;
-    std::cout << CYAN << "Nhap so luong mat hang can xuat kho: ";
-    std::cin >> n;
-    std::cin.ignore(); // Xử lý newline character sau khi nhập số lượng
-
+    while (true) {
+        std::cout << CYAN << "Nhap so luong mat hang can xuat kho: " << RESET;
+        std::cin >> n;
+        // Kiểm tra nếu cin thất bại (người dùng nhập không phải số)
+        if (std::cin.fail() || n > 10 || n <= 0) {
+            std::cin.clear(); // Xóa cờ lỗi của cin
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập không hợp lệ
+            std::cout << RED << "Gia tri nhap khong hop le. Vui long nhap lai." << RESET << std::endl;
+        } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập còn lại (nếu có)
+            break; // Thoát vòng lặp nếu nhập thành công
+        }
+    }
     for (int i = 0; i < n; i++) {
         std::cout << "Nhap ma san pham " << i+1 << ": " << RESET;
         std::cin >> code;
@@ -255,7 +265,7 @@ void xuatkho() {
                             std::cout << RESET << MAGENTA << "Da xuat " << quantity << " san pham." << RESET << std::endl;
 
                             // Ghi log sau khi xuất hàng
-                            logOperation(std::string("Xuat Mat Hang: ") + kho[j].tenhang + " So luong: " + std::to_string(quantity));
+                            logOperation(std::string("       XUAT      Mat Hang: ") + kho[j].tenhang + " So luong: " + std::to_string(quantity));
                             break;
                         } else {
                             std::cout << RED << "So luong nhap vao khong hop le hoac khong du so luong trong kho. Vui long nhap lai." << RESET << std::endl;
@@ -273,21 +283,33 @@ void xuatkho() {
     std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
     hienthikho(somathang());
 }
-void nhapkho(){
+void nhapkho() {
     std::cout << GREEN << "So mat hang co trong kho la: " << RESET;
-            std::cout << somathang() << std::endl;
-            std::cout << MAGENTA << "SO LUONG MAT HANG MUON THEM VAO KHO: " << RESET;
-            int n;
-            std::cin >> n;
-            //yêu cầu nhập số mặt hàng cần thêm vào kho
-            //mỗi mặt hàng nhập vào sẽ gọi hàm nhập ra 1 lần
-            for(int i = 0; i < n; i++){
-                std::cout << "NHAP THONG TIN MAT HANG SO " << somathang() << ": ";
-                nhap2(kho, somathang());
-            }
-            std::cout << RESET << YELLOW << "CAP NHAT KHO HANG HIEN TAI"<< RESET << std::endl;
-            hienthikho(somathang());
+    std::cout << somathang() << std::endl;
+    int n;
+    while (true) {
+        std::cout << CYAN << "Nhap so luong mat hang can nhap kho: " << RESET;
+        std::cin >> n;
+        if (std::cin.fail() || n >= 90 || n <= 0) {
+            std::cin.clear(); // Xóa cờ lỗi của cin
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập không hợp lệ
+            std::cout << RED << "Gia tri nhap khong hop le. Vui long nhap lai." << RESET << std::endl;
+        } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập còn lại (nếu có)
+            break; // Thoát vòng lặp nếu nhập thành công
         }
+    }
+
+    // Yêu cầu nhập số mặt hàng cần thêm vào kho
+    // Mỗi mặt hàng nhập vào sẽ gọi hàm nhập ra 1 lần
+    for (int i = 0; i < n; i++) {
+        std::cout << "NHAP THONG TIN MAT HANG SO " << somathang() << ": ";
+        nhap2(kho, somathang());
+    }
+
+    std::cout << RESET << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
+    hienthikho(somathang());
+}
 void baomat(){
     //nhập thông tin tài khoản mật khẩu cho hệ thống bằng cách kiểm tra trùng chuỗi kí tự
     std::string a = "alester";
@@ -326,7 +348,7 @@ void timee(std::string& timeStr) {
 
     std::stringstream ss;
     ss  << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year
-       << "      Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec ;
+       << "      Lúc: " <<  ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec ;
     timeStr = ss.str();
     
 }
@@ -413,8 +435,11 @@ void laythongtinsanpham(const std::string& code) {
     }
 }
 int main() {
-    baomat(); //đăng nhập để vào hệ thống
     deletefile(); //xoá thông tin còn dư trong file ghi lịch sử nếu còn bị tồn lại từ trước
+            std::string timeMsg;
+            timee(timeMsg);
+            logOperation(timeMsg);
+            logOperation("     Dang nhap vao he thong");
     taokho();
     while(1){
         std::cout << MAGENTA << "______WELCOME TO THE WAREHOUSE MANAGEMENT SYSTEM______" << std::endl;
@@ -434,20 +459,16 @@ int main() {
             //FINISHED
         }
         else if(lc == 2){
-            std::cout << YELLOW;
             std::string timeMsg;
             timee(timeMsg);
-            std::cout << RESET;
             logOperation(timeMsg);
             //FINISHED
             xuatkho();
         }
         else if(lc == 3){
-            std::cout << YELLOW;
             std::string timeMsg;
             timee(timeMsg);
             logOperation(timeMsg);
-            std::cout << RESET;
             nhapkho();
         }
         else if(lc == 4){
@@ -492,7 +513,7 @@ int main() {
             laythongtinsanpham(code);
         }
         else if(lc == 6){
-            std::cout << CYAN << "\n\nLich su nhap & xuat hang trong ngay hom nay"  << RESET << RED << std::endl;
+            std::cout << CYAN << "\n\nLICH SU HOAT DONG CUA KHO HANG"  << RESET << RED << std::endl;
             showlog();
             std::cout << "\n\n" << RESET;
         }
