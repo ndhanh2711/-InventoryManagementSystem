@@ -185,18 +185,27 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
 }
 void xuatkho() {
     std::string code;
-    int n;
+    int n;    
+    std::cout << CYAN << "Nhap so luong mat hang can xuat kho: "<< RESET;
     while (true) {
-        std::cout << CYAN << "Nhap so luong mat hang can xuat kho: " << RESET;
-        std::cin >> n;
-        // Kiểm tra nếu cin thất bại (người dùng nhập không phải số)
-        if (std::cin.fail() || n > 10 || n <= 0) {
-            std::cin.clear(); // Xóa cờ lỗi của cin
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập không hợp lệ
-            std::cout << RED << "Gia tri nhap khong hop le. Vui long nhap lai." << RESET << std::endl;
+        std::string input;
+        std::cin >> input;
+
+        bool isNumber = true;
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isNumber = false;
+                break;
+            }
+        }
+
+        if (!isNumber) {
+            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         } else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập còn lại (nếu có)
-            break; // Thoát vòng lặp nếu nhập thành công
+            n = stoi(input);
+            break; // Ð?u vào h?p l?
         }
     }
     for (int i = 0; i < n; i++) {
@@ -286,17 +295,27 @@ void xuatkho() {
 void nhapkho() {
     std::cout << GREEN << "So mat hang co trong kho la: " << RESET;
     std::cout << somathang() << std::endl;
+    std::cout << "SO LUONG MAT HANG MUON THEM VAO KHO: ";
     int n;
     while (true) {
-        std::cout << CYAN << "Nhap so luong mat hang can nhap kho: " << RESET;
-        std::cin >> n;
-        if (std::cin.fail() || n >= 90 || n <= 0) {
-            std::cin.clear(); // Xóa cờ lỗi của cin
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập không hợp lệ
-            std::cout << RED << "Gia tri nhap khong hop le. Vui long nhap lai." << RESET << std::endl;
+        std::string input;
+        std::cin >> input;
+
+        bool isNumber = true;
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isNumber = false;
+                break;
+            }
+        }
+
+        if (!isNumber) {
+            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         } else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Bỏ qua phần nhập còn lại (nếu có)
-            break; // Thoát vòng lặp nếu nhập thành công
+            n = stoi(input);
+            break; // Ð?u vào h?p l?
         }
     }
 
@@ -314,7 +333,27 @@ void xoakho() {
     std::string code;
     int n;
     std::cout << CYAN << "Nhap so luong mat hang xoa khoi kho: ";
-    std::cin >> n;
+    while (true) {
+        std::string input;
+        std::cin >> input;
+
+        bool isNumber = true;
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isNumber = false;
+                break;
+            }
+        }
+
+        if (!isNumber) {
+            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            n = stoi(input);
+            break; // Ð?u vào h?p l?
+        }
+    }
     std::cin.ignore(); 
 
     for (int i = 0; i < n; i++) { 
@@ -382,7 +421,27 @@ void xoakho() {
 void dieuchinhgia() {
     int n;
     std::cout << CYAN << "Nhap so luong mat hang can dieu chinh gia: ";
-    std::cin >> n;
+    while (true) {
+        std::string input;
+        std::cin >> input;
+
+        bool isNumber = true;
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isNumber = false;
+                break;
+            }
+        }
+
+        if (!isNumber) {
+            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            n = stoi(input);
+            break; // Ð?u vào h?p l?
+        }
+    }
     std::cin.ignore();
 
     for (int i = 0; i < n; ++i) {
@@ -587,7 +646,27 @@ int main() {
         std::cout << "!____________________________________________________!" << std::endl;
         std::cout << "SELECT OPTION: " << RESET;
         int lc;
-        std::cin >> lc ;
+        while (true) {
+        std::string input;
+        std::cin >> input;
+
+        bool isNumber = true;
+        for (char c : input) {
+            if (!isdigit(c)) {
+                isNumber = false;
+                break;
+            }
+        }
+
+        if (!isNumber) {
+            std::cout << "Dau vao  khong dung dinh dang. Vui long nhap lai.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            lc = stoi(input);
+            break; // Ð?u vào h?p l?
+        }
+    }
         if(lc == 1){
             hienthikho(somathang());
             //FINISHED
@@ -666,6 +745,9 @@ int main() {
                 std::cout << "------------------EEEEE  N   N  DDDD------------------\n" << RESET;
             return 0;
         }
+        else {
+        std::cout << "Lua chon khong hop le. Vui long chon lai.\n";
+    }
     }
     return 0;
 }
