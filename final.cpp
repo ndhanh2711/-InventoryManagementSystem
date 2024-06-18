@@ -508,7 +508,6 @@ void showlog(){
 }
 void check1() {
     //các hàm sắp xếp
-	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].giathanh < kho[j].giathanh) {
@@ -520,7 +519,6 @@ void check1() {
     hienthikho(somathang());
 }
 void check2() {
-	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].giathanh > kho[j].giathanh) {
@@ -532,7 +530,6 @@ void check2() {
     hienthikho(somathang());
 }
 void check3() {
-	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].soluong < kho[j].soluong) {
@@ -544,7 +541,6 @@ void check3() {
     hienthikho(somathang());
 }
 void check4() {
-	taokho();
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
             if (kho[i].soluong > kho[j].soluong) {
@@ -644,7 +640,6 @@ int main() {
                 }   
         }
         else if (lc == 5) {
-            taokho();
             std::string code;
             std::cout << "Nhap ma san pham: ";
             std::cin >> code;
