@@ -307,12 +307,6 @@ void baomat(){
     }
     std::cout << RESET;
 }
-void timee(){
-    time_t now = time(0);
- tm *ltm = localtime(&now);
- std::cout << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year << " Lúc: " << 1 + ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec << std::endl;
-}
-
 void deletefile() {
     std::ofstream logFile("log.txt", std::ios::trunc);
     logFile.close();
