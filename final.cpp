@@ -183,7 +183,7 @@ void hienthikho(int n){ //Hàm hiển thị kho hàng với các mặt hàng s�
         }
     }
 }
-class Mathang {
+class Mathang {// sử dụng đa hình, thừa kế.
 public:
     virtual void xuatHang(int quantity) = 0;
     virtual void nhapHang(int quantity) = 0;
@@ -196,27 +196,27 @@ class MatHang : public Mathang {
 public:
     MatHang(mathang &m) : mh(m) {}
 
-    void xuatHang(int quantity) override {
+    void xuatHang(int quantity) override {// hàm xuất hàng
             mh.soluong -= quantity;
-            std::cout << "Da xuat " << quantity << " san pham dien tu: " << mh.tenhang << std::endl;
+            std::cout << "Da xuat " << quantity << " san pham : " << mh.tenhang << std::endl;
     }
 
-    void nhapHang(int quantity) override {
+    void nhapHang(int quantity) override {// hàm nhập hàng
         mh.soluong += quantity;
-        std::cout << "Da nhap " << quantity << " san pham dien tu: " << mh.tenhang << std::endl;
+        std::cout << "Da nhap " << quantity << " san pham : " << mh.tenhang << std::endl;
     }
 
-    void xoaHang() override {
+    void xoaHang() override {// hàm xóa hàng
         mh.soluong = 0;
-        std::cout << "San pham dien tu da duoc xoa khoi kho: " << mh.tenhang << std::endl;
+        std::cout << "San pham da duoc xoa khoi kho: " << mh.tenhang << std::endl;
     }
 
-    void dieuChinhGia(double newPrice) override {
+    void dieuChinhGia(double newPrice) override { // hàm điều chỉnh giá
         mh.giathanh = newPrice;
-        std::cout << "Gia moi cho san pham dien tu la " << newPrice << " VND." << std::endl;
+        std::cout << "Gia moi cho san pham la " << newPrice << " VND." << std::endl;
     }
 };
-void xuatkho() {
+void xuatkho() {// hàm xuất kho
     std::string code;
     int n;    
     std::cout << CYAN << "Nhap so luong mat hang can xuat kho: "<< RESET;
@@ -328,7 +328,7 @@ void xuatkho() {
     hienthikho(somathang());
 }
    
-void nhapkho(){
+void nhapkho(){ // hàm nhập kho
     std::cout << "So mat hang co trong kho la: ";
     std::cout << somathang() << std::endl;
     std::cout << "SO LUONG MAT HANG MUON THEM VAO KHO: ";
@@ -425,11 +425,11 @@ void nhapkho(){
 
 
 
-void xoakho() {
+void xoakho() {// hàm xóa kho
     std::string code;
     int n;
     std::cout << "Nhap so luong mat hang xoa khoi kho: ";
-    while (true) {
+    while (true) {// hàm check đầu vào
         std::string input;
         std::cin >> input;
 
@@ -456,17 +456,17 @@ void xoakho() {
         std::getline(std::cin, code);
 
         bool found = false;
-        for (int j = 0; j < kho.size(); j++) {
+        for (int j = 0; j < kho.size(); j++) {// kiểm tra có mã code vừa nhập trong kho hay không?
             if (kho[j].code == code) {
                 found = true;
                 bool checkname = false;
-                if (j < somathang() - 1 && kho[j].code == kho[j + 1].code) {
+                if (j < somathang() - 1 && kho[j].code == kho[j + 1].code) {// kiểm tra xem mã code có đại diện cho nhiều sản phẩm không?
                     std::cout << RED << "Co nhieu mat hang cung ma don hang, vui long nhap day du ten mat hang: " << RESET;
                     std::string Name;
                     std::getline(std::cin, Name);
 
                     for (int k = j; k < somathang(); k++) {
-                        if (kho[k].tenhang == Name && kho[k].code == code) {
+                        if (kho[k].tenhang == Name && kho[k].code == code) {// nếu trùng code thì sẽ kiểm tra đến tên sản phẩm
                             checkname = true;
                             std::cout << GREEN << "Ten hang: " << kho[k].tenhang << std::endl;
                             std::cout << "So Luong: " << kho[k].soluong << std::endl;
@@ -500,7 +500,7 @@ void xoakho() {
     std::cout << "CAP NHAT KHO HANG HIEN TAI\n";
     hienthikho(somathang());
 }
-void dieuchinhgia() {
+void dieuchinhgia() {// hàm điều chỉnh giá
     int n;
     std::cout << CYAN << "Nhap so luong mat hang can dieu chinh gia: ";
     std::cin >> n;
@@ -626,7 +626,7 @@ void showlog(){
         std::cerr << "Unable to open log file." << std::endl;
     }
 }
-template <typename Compare>
+template <typename Compare> // sử dụng hàm khuôn mẫu
 void sapxep(mathang kho[], Compare cmp) {
     for (int i = 0; i < somathang() - 1; i++) {
         for (int j = i + 1; j < somathang(); j++) {
@@ -756,13 +756,11 @@ int main() {
     }
         if(lc == 1){
             hienthikho(somathang());
-            //FINISHED
         }
         else if(lc == 2){
             std::string timeMsg;
             timee(timeMsg);
             logOperation(timeMsg);
-            //FINISHED
             xuatkho();
         }
         else if(lc == 3){
