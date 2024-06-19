@@ -579,8 +579,8 @@ void dieuchinhgia() {// hàm điều chỉnh giá
 }
 void baomat(){
     //nhập thông tin tài khoản mật khẩu cho hệ thống bằng cách kiểm tra trùng chuỗi kí tự
-    std::string a = "alester";
-    std::string b = "top1thaibinh";
+    std::string a = "e9vippro";
+    std::string b = "e987654321";
     std::cout << GREEN << "LOG IN(Use the English keyboard to type.)"<< RESET << std::endl;
     while(1){
         std::cout << GREEN << "User name:" << RESET;
@@ -724,6 +724,7 @@ void laythongtinsanpham(const std::string& code) {
     }
 }
 int main() {
+    baomat();
     deletefile(); //xoá thông tin còn dư trong file ghi lịch sử nếu còn bị tồn lại từ trước
             std::string timeMsg;
             timee(timeMsg);
