@@ -22,11 +22,11 @@ struct mathang{
     char tenhang[100];
     int soluong;
     double giathanh;
-    char codeitem;
     std::string code;
 };
 typedef struct mathang mathang;
 std::vector<mathang> kho(100);
+//khai báo động cho 100 mặt hàng trong kho, trong kho chứa tối đa 100 loại mặt hàng
 
 std::string generateCode(const std::string& name) { // hàm lấy code từ tên sản phẩm
     std::string code = "";
@@ -82,7 +82,7 @@ void taokho() {
     kho[0].soluong = 10;
     kho[0].giathanh = 35000;
     kho[0].code = generateCode(kho[0].tenhang);
-  
+
     strcpy(kho[1].tenhang, "Sua tam");
     kho[1].soluong = 20;
     kho[1].giathanh = 75000;
@@ -97,7 +97,7 @@ void taokho() {
     kho[3].soluong = 2000;
     kho[3].giathanh = 100000;
     kho[3].code = generateCode(kho[3].tenhang);
-   
+
     strcpy(kho[4].tenhang, "My pham");
     kho[4].soluong = 250;
     kho[4].giathanh = 500000;
@@ -327,7 +327,7 @@ void xuatkho() {// hàm xuất kho
     std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
     hienthikho(somathang());
 }
-   
+
 void nhapkho(){ // hàm nhập kho
     std::cout << BLUE << "So mat hang co trong kho la: " << RESET;
     std::cout << somathang() << std::endl;
@@ -343,9 +343,9 @@ void nhapkho(){ // hàm nhập kho
     std::cout << GREEN << "SELECT OPTION: " << RESET;
     std::cin>>check;
     if(check == 1){
-    	for(int i=0;i<n;i++){
-    	std::cout<< CYAN <<  "Nhap ma san pham: " << RESET;
-    	std::cin >> code;
+        for(int i=0;i<n;i++){
+        std::cout<< CYAN <<  "Nhap ma san pham: " << RESET;
+        std::cin >> code;
         std::cin.ignore(); // X? lý newline character sau khi nh?p mã s?n ph?m
 
         bool found = false;
@@ -392,7 +392,7 @@ void nhapkho(){ // hàm nhập kho
 
                     int quantity;
                     do {
-                        std::cout << CYAN << "Nhap so luong can xuat: ";
+                        std::cout << CYAN << "Nhap so luong can them: ";
                         std::cin >> quantity;
                         std::cin.ignore();                         
                         MatHang mh(kho[j]);
@@ -413,8 +413,7 @@ void nhapkho(){ // hàm nhập kho
     std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI" << RESET << std::endl;
     hienthikho(somathang());
 }
-	else if(check == 2){
-    int check = 0;
+    else if(check == 2){
     for(int i = 0; i < n; i++){
         std::cout << CYAN << "NHAP THONG TIN MAT HANG SO " << somathang() << ": " << RESET << std::endl;
         nhap2(kho, somathang());
@@ -484,7 +483,9 @@ void xoakho() {// hàm xóa kho
                     std::cout << GREEN << "Ten hang: " << kho[j].tenhang << std::endl;
                     std::cout << "So luong: " << kho[j].soluong << std::endl;
                     std::cout << "Gia thanh: " << kho[j].giathanh << RESET << std::endl;
-                    std::cout << GREEN << "Da xoa san pham " << kho[j].tenhang << " khoi kho." << RESET << std::endl;
+                    std::ostringstream oss;
+                    oss << YELLOW << "   XOA KHOI KHO    Mat hang: " << kho[j].tenhang  << RESET;
+                    logOperation(oss.str());
                     MatHang mh(kho[j]);
                     mh.xoaHang();
                     kho.erase(kho.begin() + j);
@@ -497,7 +498,7 @@ void xoakho() {// hàm xóa kho
             i--;
         }
     }
-    
+
     std::cout << YELLOW << "CAP NHAT KHO HANG HIEN TAI\n" << RESET;
     hienthikho(somathang());
 }
@@ -530,7 +531,7 @@ void dieuchinhgia() {// hàm điều chỉnh giá
                             std::cout << GREEN << "Ten hang: " << kho[k].tenhang << std::endl;
                             std::cout << "So Luong: " << kho[k].soluong << std::endl;
                             std::cout << "Gia: " << kho[k].giathanh << RESET << std::endl;
-
+                            int tmp = kho[k].giathanh;
                             std::cout << GREEN << "Nhap gia moi: ";
                             int newPrice;
                             std::cin >> newPrice;
@@ -538,14 +539,19 @@ void dieuchinhgia() {// hàm điều chỉnh giá
                             MatHang mh(kho[k]);
                             mh.dieuChinhGia(newPrice);
                             std::cout << RESET << "Gia moi duoc cap nhat." << std::endl;
+
+                            std::ostringstream oss;
+                            oss << YELLOW << "   DIEU CHINH GIA    Mat hang: " << kho[k].tenhang  << RESET << BLUE << "       Gia ban dau: " << tmp << RESET << GREEN << "--> Gia moi: " << newPrice << RESET;
+                            logOperation(oss.str());
                             break;
                         }
                     }
-                } else {
+                } 
+                else {
                     std::cout << GREEN << "Ten hang: " << kho[j].tenhang << std::endl;
                     std::cout << "So luong: " << kho[j].soluong << std::endl;
                     std::cout << "Gia thanh: " << kho[j].giathanh << RESET << std::endl;
-
+                    int tmppp = kho[j].giathanh;
                     std::cout << GREEN << "Nhap gia moi: ";
                     int newPrice;
                     std::cin >> newPrice;
@@ -554,6 +560,10 @@ void dieuchinhgia() {// hàm điều chỉnh giá
                     MatHang mh(kho[j]);
                     mh.dieuChinhGia(newPrice);
                     std::cout << RESET << "Gia moi duoc cap nhat." << std::endl;
+                    std::ostringstream oss;
+                    oss << YELLOW << "   DIEU CHINH GIA    Mat hang: " << kho[j].tenhang  << RESET << BLUE << "       Gia ban dau: " << tmppp << RESET << GREEN << "--> Gia moi: " << newPrice << RESET;
+                    logOperation(oss.str());
+
                 }
 
                 break; 
@@ -607,7 +617,7 @@ void timee(std::string& timeStr) {
     ss  << "Ngày: " << ltm->tm_mday << "/" << 1 + ltm->tm_mon << "/" << 1900 + ltm->tm_year
        << "      Lúc: " <<  ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec ;
     timeStr = ss.str();
-    
+
 }
 void clearLogFile() {
     //đóng file sau khi sử dụng
@@ -647,7 +657,7 @@ void check() {
         std::cout << "|  3. SAP XEP THEO SO LUONG GIAM DAN  |" << std::endl;
         std::cout << "|  4. SAP XEP THEO SO LUONG TANG DAN  |" << std::endl;
         std::cout << "|  5. THOAT                           |" << std::endl;
-        std::cout << "!____________________________________!" << RESET << std::endl;
+        std::cout << "!_____________________________________!" << RESET << std::endl;
         std::cout << GREEN << "SELECT OPTION: " << RESET;
         int check;
         std::cin >> check;
@@ -728,7 +738,7 @@ int main() {
         std::cout << "|  4.SAP XEP                                         |" << std::endl;
         std::cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << std::endl;
         std::cout << "|  6.XEM LICH SU XUAT NHAP HANG                      |" << std::endl;
-	    std::cout << "|  7.XOA HANG TRONG KHO                              |" << std::endl;
+        std::cout << "|  7.XOA HANG TRONG KHO                              |" << std::endl;
         std::cout << "|  8.DIEU CHINH GIA CAC MAT HANG                     |" << std::endl;
         std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
@@ -784,12 +794,18 @@ int main() {
             showlog();
             std::cout << "\n\n" << RESET;
         }
-	else if(lc==7){
-        	xoakho();
-	}
-	else if(lc== 8){
-		dieuchinhgia();
-	}
+    else if(lc==7){
+        std::string timeMsg;
+        timee(timeMsg);
+        logOperation(timeMsg); //hàm chạy tương ứng sẽ ghi mốc thời gian trong file
+            xoakho();
+    }
+    else if(lc== 8){
+        std::string timeMsg;
+        timee(timeMsg);
+        logOperation(timeMsg); //hàm chạy tương ứng sẽ ghi mốc thời gian trong file
+        dieuchinhgia();
+    }
         else if(lc == 0){
             deletefile();
             //FINISHED
