@@ -738,9 +738,9 @@ int main() {
         std::cout << "|  3.NHAP HANG VAO KHO                               |" << std::endl;
         std::cout << "|  4.SAP XEP                                         |" << std::endl;
         std::cout << "|  5.KIEM TRA HANG THEO MA SAN PHAM                  |" << std::endl;
-        std::cout << "|  6.XEM LICH SU XUAT NHAP HANG                      |" << std::endl;
+        std::cout << "|  6.DIEU CHINH GIA CAC MAT HANG                     |" << std::endl;
         std::cout << "|  7.XOA HANG TRONG KHO                              |" << std::endl;
-        std::cout << "|  8.DIEU CHINH GIA CAC MAT HANG                     |" << std::endl;
+        std::cout << "|  8.XEM LICH SU XUAT NHAP HANG                      |" << std::endl;
         std::cout << "|  0.THOAT HE THONG                                  |" << std::endl;
         std::cout << "!____________________________________________________!" << std::endl;
         std::cout << "SELECT OPTION: " << RESET;
@@ -790,7 +790,7 @@ int main() {
             std::cin >> code;
             laythongtinsanpham(code);
         }
-        else if(lc == 6){
+        else if(lc == 8){
             std::cout << CYAN << "\n\nLICH SU HOAT DONG CUA KHO HANG"  << RESET << RED << std::endl;
             showlog();
             std::cout << "\n\n" << RESET;
@@ -801,7 +801,7 @@ int main() {
         logOperation(timeMsg); //hàm chạy tương ứng sẽ ghi mốc thời gian trong file
             xoakho();
     }
-    else if(lc== 8){
+    else if(lc== 6){
         std::string timeMsg;
         timee(timeMsg);
         logOperation(timeMsg); //hàm chạy tương ứng sẽ ghi mốc thời gian trong file
