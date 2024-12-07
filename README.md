@@ -1,34 +1,48 @@
-# Ý tưởng thực hiện bài code
-## Hệ thống quản lí xuất nhập kho
-- Tạo một kho lưu trữ các mặt hàng có sẵn bằng mảng((cấp phát động) (Dùng C), còn trong C++ dùng vector cho tiện)
-- Kho chứa tối đa được 100 mặt hàng, mỗi mặt hàng có các data( Tên sp, mã sp, số lượng, giá thành/1sp, mã code cập nhật tự động cho sản phẩm)
+# Implementation Idea
+## Inventory Management System
+- Create a storage system for available items using a dynamically allocated array (in C). In C++, use a vector for convenience.
+- The warehouse can store up to 100 items, each with the following data: 
+  - Product name
+  - Product code
+  - Quantity
+  - Price per item
+  - A unique code for each product, automatically generated.
 
-### Hệ thống sẽ có các chức năng
-#### Hiển thị kho  (1)
-      - Sử dụng MENU lựa chọn để làm giao diện cho hệ thống
-      1. Hiển thị các mặt hàng tồn kho (Hệ thống sẽ thông báo các mặt hàng có số lượng quá ít trong kho( < 20sp )).
-      2. Hệ thống tự động tính toán tổng số tiền hàng có trong kho.
-#### Xuất kho  (2)
-      1. Xuất kho (Bạn sẽ cần nhập mã code sản phẩm, số lượng mặt hàng muốn xuất kho, sau đó hệ thống sẽ yêu cầu nhập thông tin xuất kho của từng loại mặt hàng (mã sp, số lượng))
-      2. Nếu số lượng sp xuất kho vượt quá số lượng mặt hàng có trong kho, hệ thống tự động báo lỗi và yêu cầu nhập lại.
-      3. Sau khi xuất kho, kho hàng tự động cập nhật thông tin cho người dùng
-#### Nhập kho  (3)
-      1. Cần chọn nhập vào mặt hàng mới hay nhập thêm hàng của mặt hàng sẵn có
-      2. Nhập số lượng chỉ cần nhập mã sẽ hiển thị thông tin mặt hàng sẵn có và chỉ cần nhập thêm số lượng
-      3. Nhập măt hàng mới sẽ cần nhập các thông tin đi kèm 
-#### Sắp xếp các mặt hàng theo yêu cầu  (4)
-      Chức năng này giúp phục vụ việc kiểm tra hàng hoá
-      1. Tăng giảm theo giá thành
-      2. Tăng giảm theo số lượng
-      (Dùng menu tăng giảm để kiểm tra)
-#### Nhập mã sản phẩm để hiện thông tin  (5)
-    1. Khi bạn nhập code của sản phẩm sẽ hiện ra tên sản phẩm, số lượng, giá thành.
-    2. Nếu code sai sẽ in ra không có sản phẩm này.
-#### Xem lịch sử thay đổi của kho hàng (6)
-    1.Nhập hay xuất hay thay đổi sẽ được ghi vào file và xuất ra bằng chức năng số (6)
-#### Xoá mặt hàng có săn trong kho(7)
-    1. Nhập mã mặt hàng cần xoá và mặt hàng sẽ bị xoá khỏi kho
-#### Chỉnh sửa giá của mặt hàng (8)
-    1. Nhập mã của mặt hàng cần thay đổi giá và nhập giá mới
-##### Thoát hệ thống (0)
-     RETURN 0;
+### System Features
+#### Display Inventory (1)
+- Use a MENU system to serve as the interface for the system:
+  1. Display the items in stock (the system will notify you of items with low stock levels (< 20 units)).
+  2. Automatically calculate the total value of goods in the warehouse.
+
+#### Export Items (2)
+1. Export items:
+   - You will need to enter the product code and the quantity to export. The system will then prompt you to input export details for each item (product code, quantity).
+2. If the requested export quantity exceeds the available stock, the system will display an error message and prompt you to re-enter the data.
+3. After exporting, the warehouse information will be automatically updated for the user.
+
+#### Import Items (3)
+1. Choose whether to add a new product or restock an existing product.
+2. For restocking, simply enter the product code, and the system will display the item's current information, allowing you to input the additional quantity.
+3. For adding a new product, you will need to input all required details.
+
+#### Sort Items (4)
+This feature facilitates inventory checking:
+1. Sort by price (ascending or descending).
+2. Sort by quantity (ascending or descending).
+   - Use a menu to select sorting order.
+
+#### Search by Product Code (5)
+1. When you enter a product code, the system will display the product's name, quantity, and price.
+2. If the code is invalid, it will display a "Product not found" message.
+
+#### View Inventory Change History (6)
+1. All changes (imports, exports, or modifications) are logged in a file and can be viewed using this feature.
+
+#### Delete an Item from Inventory (7)
+1. Enter the product code of the item to be deleted, and it will be removed from the inventory.
+
+#### Edit Product Price (8)
+1. Enter the product code for the item you want to update and input the new price.
+
+#### Exit the System (0)
+   RETURN 0;
